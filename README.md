@@ -1,3 +1,8 @@
+![Codecov](https://img.shields.io/codecov/c/github/cccb/sonic)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/cccb/sonic/test)
+[![license](https://img.shields.io/gitlab/license/xengi/dotfiles)](https://choosealicense.com/licenses/mit/)
+[![maintained](https://img.shields.io/maintenance/yes/2023)]()
+
 # sonic
 
 chaos music control inspired by [relaxx player][relaxx]
