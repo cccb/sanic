@@ -3,7 +3,9 @@
   "module": "server.ts",
   "type": "module",
   "scripts": {
-    "start": "bun run server.ts"
+    "start": "bun run server.ts",
+    "init": "mkdir -p /tmp/sanic/{music,playlists}; touch /tmp/sanic/mpd_db",
+    "mpd": "mpd --no-daemon ./mpd.conf"
   },
   "devDependencies": {
     "bun-types": "latest"
