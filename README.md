@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/gitlab/license/xengi/dotfiles)](https://choosealicense.com/licenses/mit/)
 [![maintained](https://img.shields.io/maintenance/yes/2023)]()
 
-# sonic
+# sanic
 
 chaos music control inspired by [relaxx player][relaxx]
 
