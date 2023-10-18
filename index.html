@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>sanic :: paused</title>
+    <style>
+/* generic styles */
+
+
+/* tab controls */
+.tabs {
+  overflow: hidden; /* what does this do? */
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+.tabs button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+.tabs button:hover {
+  background-color: #ddd;
+}
+.tabs button.active {
+  background-color: #ccc;
+}
+.tab {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+    </style>
+    <script>
+      function switchTab(event, tabname) {
+        document.getElementsByClassName("tab").forEach((tab) => tab.style.display = "none");
+        document.getElementsByClassName("tablink").forEach((but) => but.className = but.className.replace(" active", ""));
+        document.getElementById(tabname).style.display = "block";
+        event.currentTarget.className += " active";
+      }
+    </script>
+  </head>
+  <body>
+    <!-- top navigation and playback control -->
+    <header id="top-nav">
+      <div id="">
+      </div>
+    </header>
+
+    <main>
+      <section id="playlist">
+        <table>
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Artist</th>
+              <th>Title</th>
+              <th>Album</th>
+              <th>Length</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>autoincremented number</td>
+              <td>some artist</td>
+              <td>some song</td>
+              <td>some album</td>
+              <td>some time</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <section id="db">
+        <!-- tabs -->
+        <div id="tabs">
+          <button class="tablink active" onclick="switchTab(event, 'folders')">Folders</button>
+          <button class="tablink" onclick="switchTab(event, 'search')">Search</button>
+          <button class="tablink" onclick="switchTab(event, 'playlists')">Playlists</button>
+        </div>
+        <!-- Folders tab -->
+        <div id="tab-folders" class="tab active">
+          <nav>
+
+          </nav>
+        </div>
+        <!-- Search tab -->
+        <div id="tab-search" class="tab">
+          <form>
+            <input type="text" />
+            <button>Search</button>
+          </form>
+        </div>
+        <!-- Playlists tab -->
+        <div id="tab-playlists" class="tab">
+          <ul>
+            <li>Playlist 1</li>
+            <li>Playlist 2</li>
+            <li>Playlist 3</li>
+          </ul>
+        </div>
+        <!-- Tab results -->
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Artist</th>
+                <th>Title</th>
+                <th>Album</th>
+                <th>Length</th>
+                <th>Filename</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>some artist</td>
+                <td>some song</td>
+                <td>some album</td>
+                <td>some time</td>
+                <td>some filename</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- informational footer -->
+    <footer id="bottom">
+      <p>sanic mpd web ui - by XenGi and coon &copy; 2023</p>
+    </footer>
+  </body>
+</html>
+
