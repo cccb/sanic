@@ -5,12 +5,17 @@
   "scripts": {
     "start": "bun run server.ts",
     "init": "mkdir -p /tmp/sanic/{music,playlists}; touch /tmp/sanic/mpd_db",
-    "mpd": "mpd --no-daemon ./mpd.conf"
+    "mpd": "mpd --no-daemon ./mpd.conf",
+    "docker-build": "docker build --pull -t sanic .",
+    "docker-run": "docker run -it --rm -p 8000:8000 -p 8080:8080 sanic"
   },
   "devDependencies": {
     "bun-types": "latest"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "react": "^18.2.0"
   }
 }
