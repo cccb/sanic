@@ -6,22 +6,22 @@
     <title>sanic :: paused</title>
     <style>
 /* generic styles */
+* {
+  margin: 0;
+}
 
+header, footer, main, section {
+  border: 1px solid red;
+  margin: 1px;
+  padding 1px;
+}
 
 /* tab controls */
 .tabs {
   overflow: hidden; /* what does this do? */
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
 }
 .tabs button {
-  background-color: inherit;
   float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
 }
 .tabs button:hover {
   background-color: #ddd;
@@ -31,9 +31,16 @@
 }
 .tab {
   display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
+}
+
+/* table */
+thead {
+  background-color: #ccc;
+}
+
+/* player controls */
+#player-controls {
+  border: 1px solid blue;
 }
     </style>
     <script>
@@ -48,7 +55,19 @@
   <body>
     <!-- top navigation and playback control -->
     <header id="top-nav">
-      <div id="">
+      <div id="player-controls">
+        <div>
+          <input type="text" value="artist - track" />
+        </div>
+        <div>
+          <button>⏮️</button>
+          <button>⏯️</button>
+          <button>⏹️</button>
+          <button>⏭️</button>
+        </div>
+        <div>
+          <input type="range" id="track-progress" name="track-progress" min="0" max="100" />
+        </div>
       </div>
     </header>
 
