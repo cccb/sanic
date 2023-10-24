@@ -18,6 +18,14 @@ chaos music control inspired by [relaxx player][relaxx]
 - add music from other sources like youtube (`youtube-dl`)
 - add playlists from internet radios (`*.m3u`)
 
+## development
+
+Build nix flake:
+
+```shell
+nix build
+```
+
 ---
 
 Made with ❤️ and 🐍.
