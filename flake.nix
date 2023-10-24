@@ -11,7 +11,6 @@
   };
   outputs = { self, nixpkgs, flake-utils, gomod2nix }: flake-utils.lib.eachDefaultSystem (system:
     let
-      #pkgs = nixpkgs.legacyPackages.${system};
       pkgs = import nixpkgs {
         inherit system;
         overlays = [ gomod2nix.overlays.default ];
