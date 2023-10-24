@@ -22,15 +22,16 @@
         modules = ./gomod2nix.toml;
       };
     in {
+      defaultPackage = sanic;
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           go
           gomod2nix.packages.${system}.default
+          sanic
         ];
         packages = with pkgs; [
           mpd
           mpc-cli
-          sanic
         ];
       };
     }
