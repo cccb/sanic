@@ -4,62 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>sanic :: paused</title>
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <style>
-/* generic styles */
-* {
-  margin: 0;
-}
-
-header, footer, main, section {
-  border: 1px solid red;
-  margin: 1px;
-  padding: 1px;
-}
-
-/* tab controls */
-.tabs {
-  overflow: hidden; /* what does this do? */
-}
-.tabs button {
-  float: left;
-}
-.tabs button:hover {
-  background-color: #ddd;
-}
-.tabs button.active {
-  background-color: #ccc;
-}
-.tab {
-  display: none;
-}
-
-/* table */
-thead {
-  background-color: #ccc;
-}
-
-/* player controls */
-#player-controls {
-  border: 1px solid blue;
-}
-    </style>
-    <script>
-      function switchTab(event, tabname) {
-        document.getElementsByClassName("tab").forEach((tab) => tab.style.display = "none");
-        document.getElementsByClassName("tablink").forEach((but) => but.className = but.className.replace(" active", ""));
-        document.getElementById(tabname).style.display = "block";
-        event.currentTarget.className += " active";
-      }
-    </script>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
   </head>
   <body>
     <!-- top navigation and playback control -->
     <header id="top-nav">
-      <div id="player-controls">
-        <div>
-          <input type="text" value="artist - track" />
-        </div>
+      <div class="navbox box">
+        <button>sanic</button>
+        <button>Config</button>
+      </div>
+      <div class="navbox box">
         <div>
           <button>⏮️</button>
           <button>⏯️</button>
@@ -67,13 +21,26 @@ thead {
           <button>⏭️</button>
         </div>
         <div>
-          <input type="range" id="track-progress" name="track-progress" min="0" max="100" />
+          <label for="progress"></label>
+          <input type="range" id="progress" name="progress" min="0" max="100" />
+        </div>
+      </div>
+      <div class="navbox box">
+        <p>[ ] repeat</p>
+        <p>[ ] shuffle</p>
+        <label for="volume"></label>
+        <input id="volume" name="volume" type="range" min="1" max="100" />
+      </div>
+      <div class="navbox box">
+        <div>
+          <label for="track"></label>
+          <input id="track" name="track" type="text" value="artist - track" />
         </div>
       </div>
     </header>
 
     <main>
-      <section id="playlist">
+      <section id="playlist" class="box">
         <table>
           <thead>
             <tr>
@@ -95,7 +62,7 @@ thead {
           </tbody>
         </table>
       </section>
-      <section id="db">
+      <section id="db" class="box">
         <!-- tabs -->
         <div id="tabs">
           <button class="tablink active" onclick="switchTab(event, 'folders')">Folders</button>
@@ -150,10 +117,10 @@ thead {
     </main>
 
     <!-- informational footer -->
-    <footer id="bottom">
+    <footer id="bottom" class="box">
       <p>sanic mpd web ui - by XenGi and coon &copy; 2023</p>
     </footer>
-    <script src="index.js"></script>
+    <script src="/index.js"></script>
   </body>
 </html>
 

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 128px 1fr 1fr 32px;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas: "header" "playlist" "db" "footer";
+  }
+
+  header {
+    display: grid;
+    grid-template-columns: 128px 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas: "config playback-controls playlist-controls track-info";
+    grid-area: header;
+  }
+
+  section.playlist {
+    grid-area: playlist;
+  }
+
+  header .config {
+    grid-area: config;
+  }
+
+  header .playback-controls {
+    grid-area: playback-controls;
+  }
+
+  header .playlist-controls {
+    grid-area: playlist-controls;
+  }
+
+  header .track-info {
+    grid-area: track-info;
+  }
+
+  footer {
+    grid-area: footer;
+  }
+
+  section.db {
+    display: grid;
+    grid-template-columns: 0.7fr 1.3fr;
+    grid-template-rows: 1fr;
+    gap: 0 0;
+    grid-auto-flow: row;
+    grid-template-areas: "tabs result";
+    grid-area: db;
+  }
+
+  .db .tabs {
+    grid-area: tabs;
+  }
+
+  .db .result {
+    grid-area: result;
+  }
+</style>
+</head>
+<body>
+  <header class="header">
+    <div class="config">
+      <button disabled>sanic</button>
+      <button>Config</button>
+    </div>
+    <div class="playback-controls">
+      <div>
+        <button>⏮️</button>
+        <button>⏯️</button>
+        <button>⏹️</button>
+        <button>⏭️</button>
+      </div>
+      <label for="progress"></label>
+      <input type="range" id="progress" name="progress" min="0" max="100" />
+    </div>
+    <div class="playlist-controls">
+      <div>
+        <label for="repeat">repeat</label>
+        <input type="checkbox" id="repeat" name="repeat" />
+        <label for="shuffle">shuffle</label>
+        <input type="checkbox" id="shuffle" name="shuffle" />
+      </div>
+      <div>
+        <label for="fade">fade</label>
+        <button>-</button>
+        <input type="number" id="fade" name="fade" min="0" />
+        <button>+</button>
+      </div>
+      <label for="volume"></label>
+      <input id="volume" name="volume" type="range" min="1" max="100" />
+    </div>
+    <div class="track-info">
+      <p>Now playing: 00:00:00/100:00:00</p>
+
+      <label for="track">track</label>
+      <input type="text" id="track" name="track" disabled />
+    </div>
+  </header>
+  <section class="playlist">
+    <table>
+      <thead>
+        <tr>
+          <td>Artist</td>
+          <td>Album</td>
+          <td>Track</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>The Beatles</td>
+          <td>Some Album</td>
+          <td>Yellow Submarine</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="db">
+    <div class="tabs"></div>
+    <div class="result"></div>
+  </section>
+  <footer class="footer"></footer>
+</body>
+</html>
