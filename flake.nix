@@ -26,8 +26,11 @@
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           go
+          gopls
+          gotools
+          go-tools
           gomod2nix.packages.${system}.default
-          sanic
+          #sanic
         ];
         packages = with pkgs; [
           mpd
