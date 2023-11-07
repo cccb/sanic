@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4/middleware"
 	"golang.org/x/net/websocket"
 	"net/http"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -41,29 +41,38 @@ func main() {
 	})
 
 	e.GET("/ws", wsServe)
-	e.GET("/api/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-	e.Logger.Fatal(e.Start(":1323"))
+
+	e.Logger.Fatal(e.StartTLS(":1323", "cert.pem", "key.pem"))
+	//e.Logger.Fatal(e.Start(":1323"))
 }
 
 func wsServe(c echo.Context) error {
 	websocket.Handler(func(ws *websocket.Conn) {
 		defer ws.Close()
 		for {
-			// Write
-			err := websocket.Message.Send(ws, "Hello, Client!")
-			if err != nil {
-				c.Logger().Error(err)
-			}
-
 			// Read
 			msg := ""
-			err = websocket.Message.Receive(ws, &msg)
+			err := websocket.Message.Receive(ws, &msg)
 			if err != nil {
 				c.Logger().Error(err)
 			}
-			fmt.Printf("%s\n", msg)
+			// Forward MPD communication
+			if strings.HasPrefix(strings.ToUpper(msg), "MPD#") {
+				// TODO: forward request to mpd and response back to client
+				err := websocket.Message.Send(ws, "MPD command received, processing... processing...")
+				if err != nil {
+					c.Logger().Error(err)
+				}
+			}
+			// Download video link as audio file
+			if strings.HasPrefix(strings.ToUpper(msg), "YT#") {
+				// TODO: implement yt-dlp integration
+				err := websocket.Message.Send(ws, "YT-DLP command received, processing... processing...")
+				if err != nil {
+					c.Logger().Error(err)
+				}
+			}
+			//fmt.Printf("%s\n", msg)
 		}
 	}).ServeHTTP(c.Response(), c.Request())
 	return nil
