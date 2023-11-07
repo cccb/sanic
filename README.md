@@ -26,6 +26,10 @@ Build nix flake:
 nix build
 ```
 
+## architecture
+
+[![Architecture](https://github.com/cccb/sanic/raw/main/architecture.drawio.svg)](https://app.diagrams.net/?mode=github#Hcccb%2Fsanic%2Fmain%2Farchitecture.drawio.svg)
+
 ---
 
 Made with ❤️ and 🐍.
