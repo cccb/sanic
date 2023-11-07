@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
+  <meta charset="utf-8">
+  <title>WebSocket</title>
+  <style>
   body {
     display: grid;
     grid-template-columns: 1fr;
@@ -62,7 +64,7 @@
   .db .result {
     grid-area: result;
   }
-</style>
+  </style>
 </head>
 <body>
   <header class="header">
@@ -125,6 +127,24 @@
     <div class="tabs"></div>
     <div class="result"></div>
   </section>
-  <footer class="footer"></footer>
+  <footer class="footer">
+    <p id="console"></p>
+  </footer>
+  <script>
+    const loc = window.location;
+    const proto = loc.protocol === "https:" ? "wss:" : "ws:"
+    const ws = new WebSocket(proto + "//" + loc.host + "/ws")
+
+    ws.onopen = function() {
+      console.log("Connected")
+    }
+
+    ws.onmessage = function(evt) {
+      const out = document.getElementById("console");
+      out.innerHTML += evt.data + "<br>";
+      // TODO: react on MPD communication here
+      // TODO: react on yt-dlp communication here
+    }
+  </script>
 </body>
 </html>
