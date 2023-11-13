@@ -16,7 +16,7 @@ chaos music control inspired by [relaxx player][relaxx]
   - control current playback queue
 - no authentication required to control music playback
 - add music from other sources like youtube (`youtube-dl`)
-- add playlists from internet radios (`*.m3u`)
+- add playlists from internet radios (`*.m3u`, `*.pls`)
 
 ## development
 
