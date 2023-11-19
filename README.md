@@ -25,7 +25,7 @@ nix build
 
 ## architecture
 
-[![Architecture](https://github.com/cccb/sanic/raw/main/architecture.drawio.svg)](https://app.diagrams.net/?mode=github#Hcccb%2Fsanic%2Fmain%2Farchitecture.drawio.svg)
+[![Architecture](https://git.berlin.ccc.de/cccb/sanic/raw/branch/main/architecture.drawio.svg)](https://app.diagrams.net/?mode=git.berlin.ccc.de#Hcccb%2Fsanic%2Fmain%2Farchitecture.drawio.svg)
 
 ---
 
