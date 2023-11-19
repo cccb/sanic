@@ -1,6 +1,3 @@
-![Codecov](https://img.shields.io/codecov/c/git.berlin.ccc.de/cccb/sanic)
-![GitHub Workflow Status (with event)](https://img.shields.io/git.berlin.ccc.de/actions/workflow/status/cccb/sanic/test)
-[![license](https://img.shields.io/git.berlin.ccc.de/license/cccb/sanic)](https://choosealicense.com/licenses/mit/)
 [![maintained](https://img.shields.io/maintenance/yes/2023)]()
 
 # sanic
