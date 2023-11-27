@@ -1,0 +1,33 @@
+body {
+  background-color: #09101d;
+  color: #bbb;
+}
+
+div {
+  border: 1px dashed white;
+}
+
+button {
+  background-color: #28374a;
+  color: #bbb;
+}
+
+#flexbox-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#controls-top {
+  display: flex;
+  flex-direction: row;
+}
+
+#top-left-controls {
+  display: flex;
+  flex-direction: column;
+}
+
+#playback-controls {
+  display: flex;
+  flex-direction: column;
+}
