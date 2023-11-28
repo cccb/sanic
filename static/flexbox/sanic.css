@@ -92,7 +92,17 @@ input {
 }
 
 #controls_bottom {
+  display: flex;
+  flex-direction: row;
   flex-grow: 2;
+}
+
+#playlist_controls {
+  flex-grow: 1;
+}
+
+#playlist_tracklist {
+  flex-grow: 4;
 }
 
 #footer {
