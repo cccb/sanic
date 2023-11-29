@@ -129,5 +129,6 @@ table tr:nth-child(even) td {
 }
 
 #footer {
+  background-color: #041936;
   text-align: right;
 }
