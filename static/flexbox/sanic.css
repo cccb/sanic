@@ -24,6 +24,15 @@ table {
   border-spacing: 0pt;
 }
 
+
+table tr:nth-child(odd) td {
+  background:#1e1f1a;
+}
+
+table tr:nth-child(even) td {
+  background:#171812;
+}
+
 #flexbox-container {
   display: flex;
   flex-direction: column;
