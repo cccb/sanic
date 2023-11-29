@@ -24,6 +24,13 @@ table {
   border-spacing: 0pt;
 }
 
+td {
+  padding: 1px 1px 1px 0.5em;
+  border: solid black;
+  border-width: 0 1px 1px 0;
+  text-align: left;
+}
+
 #queue-table tr td:first-of-type {
   padding-left: 20px;
 }
