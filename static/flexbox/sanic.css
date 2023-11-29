@@ -32,7 +32,7 @@ td {
 }
 
 #queue-table tr td:first-of-type {
-  padding-left: 20px;
+  padding-left: 16px;
 }
 
 /* This is probably a better way to generate alternate coloring on tables. However,
@@ -54,6 +54,16 @@ table tr.odd {
 
 table tr.even {
   background-color: #171812;
+}
+
+#queue-table tr.playing {
+  background-color: #490b00;
+}
+
+td.playing {
+  background-image: url(../img/playback.png);
+  background-repeat: no-repeat;
+  background-position: left center;
 }
 
 #flexbox-container {
