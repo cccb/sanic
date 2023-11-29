@@ -25,12 +25,25 @@ table {
 }
 
 
+/* This is probably a better way to generate alternate coloring on tables. However,
+   background color for selected track is overwritten this way. Therefore the "old
+   school" way of alternate coloring is used for now.
+
 table tr:nth-child(odd) td {
   background:#1e1f1a;
 }
 
 table tr:nth-child(even) td {
   background:#171812;
+}
+*/
+
+table tr.odd {
+  background-color: #1e1f1a;
+}
+
+table tr.even {
+  background-color: #171812;
 }
 
 #flexbox-container {
