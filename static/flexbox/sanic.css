@@ -18,6 +18,12 @@ input {
   color: white;
 }
 
+table {
+  width: 100%;
+  table-layout: fixed;
+  border-spacing: 0pt;
+}
+
 #flexbox-container {
   display: flex;
   flex-direction: column;
@@ -88,6 +94,8 @@ input {
 }
 
 #queue {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
 }
 
@@ -98,11 +106,17 @@ input {
 }
 
 #playlist_controls {
-  flex-grow: 1;
+  background-color: #171812;;
+  /* flex-grow: 1; */
+
+  width: 20%; /* frickel? */
 }
 
 #playlist_tracklist {
-  flex-grow: 4;
+  display: flex;
+  flex-direction: column;
+
+  width: 80%; /* frickel? */
 }
 
 #footer {
