@@ -24,6 +24,9 @@ table {
   border-spacing: 0pt;
 }
 
+#queue-table tr td:first-of-type {
+  padding-left: 20px;
+}
 
 /* This is probably a better way to generate alternate coloring on tables. However,
    background color for selected track is overwritten this way. Therefore the "old
