@@ -5,7 +5,7 @@ html, body {
 }
 
 div {
-  border: 1px dashed white;
+  /* border: 1px dashed white; */
 
   font-weight: normal;
   font-family: Arial, Helvetica, sans-serif;
