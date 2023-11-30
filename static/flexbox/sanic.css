@@ -165,6 +165,7 @@ td.playing {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  border-bottom: 4px ridge #3a506b;
 }
 
 #controls_bottom {
@@ -178,6 +179,7 @@ td.playing {
   /* flex-grow: 1; */
 
   width: 20%; /* frickel? */
+  border-right: 4px ridge #3a506b;
 }
 
 #playlist_tracklist {
