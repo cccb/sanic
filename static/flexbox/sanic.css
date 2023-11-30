@@ -153,7 +153,8 @@ td.playing {
 }
 
 #sanic-logo {
-  width: 50px;
+  width: 36px;
+  padding-left: 8px;
 }
 
 #xfade {
