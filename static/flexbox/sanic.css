@@ -92,6 +92,14 @@ td.playing {
 #controls-top {
   display: flex;
   flex-direction: row;
+
+  padding: 5px;
+  background-repeat: repeat-x;
+  background-image: url(../img/top-controls-bg.png);
+}
+
+#controls-top div {
+  border-right: 1px solid black;
 }
 
 #top-left-controls {
