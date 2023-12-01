@@ -118,6 +118,14 @@ td.playing {
   width: 160px;
 }
 
+#progress {
+  margin-left: 10px;
+}
+
+#volume {
+  margin-left: 10px;
+}
+
 #queue-volume-controls {
   width: 150px;
 }
