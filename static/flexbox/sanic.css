@@ -22,9 +22,16 @@ button {
   border-bottom-color: #3A3A3A;
 }
 
-input {
+input[type=text] {
   background-color: #28374a;
   color: white;
+
+  border: 1px solid black;
+
+  border-left-color: black;
+  border-top-color: black;
+  border-right-color:#545454;
+  border-bottom-color: #545454;
 }
 
 table {
