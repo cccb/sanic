@@ -120,10 +120,12 @@ td.playing {
 
 #progress {
   margin-left: 10px;
+  width: 90%;
 }
 
 #volume {
   margin-left: 10px;
+  width: 90%;
 }
 
 #queue-volume-controls {
