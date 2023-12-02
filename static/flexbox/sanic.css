@@ -15,6 +15,11 @@ div {
 button {
   background-color: #28374a;
   color: #bbb;
+
+  border-left-color: #545454;
+  border-top-color: #545454;
+  border-right-color: #3a3a3a;
+  border-bottom-color: #3A3A3A;
 }
 
 input {
