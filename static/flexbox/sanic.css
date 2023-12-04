@@ -34,6 +34,26 @@ input[type=text] {
   border-bottom-color: #545454;
 }
 
+input[type=checkbox] {
+  appearance: none;
+  background-color: #2e2e2e;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 5px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentColor;
+
+  border-left-color: #b9b9b9;
+  border-top-color: #b9b9b9;
+  border-right-color:#5e5e5e;
+  border-bottom-color: #5e5e5e;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #cc0000;
+}
+
 table {
   width: 100%;
   table-layout: fixed;
