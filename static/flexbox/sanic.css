@@ -93,6 +93,13 @@ td {
   text-align: left;
 }
 
+#queue {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  border-bottom: 4px ridge #3a506b;
+}
+
 #queue-table tr td:first-of-type {
   padding-left: 16px;
 }
@@ -223,13 +230,6 @@ table tr:hover td {
 
 #xfade {
   width: 20px;
-}
-
-#queue {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  border-bottom: 4px ridge #3a506b;
 }
 
 #controls_bottom {
