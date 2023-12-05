@@ -105,6 +105,10 @@ table tr:nth-child(even) td {
   background-color: #490b00;
 }
 
+table tr:hover td {
+  background-color: #354158 !important; /* TODO: remove !important */
+}
+
 #flexbox-container {
   display: flex;
   flex-direction: column;
