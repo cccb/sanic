@@ -84,9 +84,13 @@ td {
   padding-left: 16px;
 }
 
-/* This is probably a better way to generate alternate coloring on tables. However,
-   background color for selected track is overwritten this way. Therefore the "old
-   school" way of alternate coloring is used for now.
+#queue table tr.playing td:first-of-type::before {
+  content: '\2BC8';
+}
+
+#queue table tr:not(.playing) td:first-of-type {
+  padding-left: 2em; /* TODO: do proper spacing */
+}
 
 table tr:nth-child(odd) td {
   background:#1e1f1a;
@@ -95,24 +99,10 @@ table tr:nth-child(odd) td {
 table tr:nth-child(even) td {
   background:#171812;
 }
-*/
 
-table tr.odd {
-  background-color: #1e1f1a;
-}
-
-table tr.even {
-  background-color: #171812;
-}
-
-#queue-table tr.playing {
+#queue table tr:nth-child(odd).playing td,
+#queue table tr:nth-child(even).playing td {
   background-color: #490b00;
-}
-
-td.playing {
-  background-image: url(../img/playback.png);
-  background-repeat: no-repeat;
-  background-position: left center;
 }
 
 #flexbox-container {
