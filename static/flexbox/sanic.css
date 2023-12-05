@@ -1,7 +1,10 @@
 html, body {
   background-color: #09101d;
   color: #bbb;
-  height: 99%;
+
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 div {
