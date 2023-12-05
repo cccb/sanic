@@ -74,8 +74,8 @@ table {
 }
 
 thead {
-  background-repeat: repeat-x;
-  background-image: url(../img/table-header-gradient.png);
+  background: rgb(15,29,47);
+  background: linear-gradient(0deg, rgba(15,29,47,1) 0%, rgba(15,29,47,1) 50%, rgba(7,14,23,1) 100%);
 }
 
 th {
