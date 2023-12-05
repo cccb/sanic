@@ -246,7 +246,7 @@ table tr:hover td {
   border-right: 4px ridge #3a506b;
 }
 
-#playlist_tracklist {
+#results_tracklist {
   display: flex;
   flex-direction: column;
 
