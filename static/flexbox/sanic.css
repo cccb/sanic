@@ -29,6 +29,12 @@ button {
   border-bottom-color: #3A3A3A;
 }
 
+.borderless-button {
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+}
+
 input[type=text] {
   background-color: #28374a;
   color: white;
@@ -168,7 +174,6 @@ table tr:hover td {
 }
 
 #volume {
-  margin-left: 10px;
   width: 90%;
 }
 
@@ -188,6 +193,11 @@ table tr:hover td {
 }
 
 #queue-xfade-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+#volume-control {
   display: flex;
   flex-direction: row;
 }
