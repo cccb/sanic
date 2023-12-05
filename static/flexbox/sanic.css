@@ -1,3 +1,7 @@
+:root {
+  --ribbon-width: 160px;
+}
+
 html, body {
   background-color: #09101d;
   color: #bbb;
@@ -141,10 +145,21 @@ table tr:hover td {
   text-align: left;
 }
 
-#playback-controls {
+#playback-controls div:first-child {
   display: flex;
-  flex-direction: column;
-  width: 160px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#playback-controls div button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  height: calc(var(--ribbon-width) / 4 - 8px);
+  width: calc(var(--ribbon-width) / 4 - 8px);
 }
 
 #progress {
