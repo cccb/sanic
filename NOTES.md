@@ -18,3 +18,14 @@
 - [ ] save playlist
 - [ ] delete playlist
 
+# mpd state
+
+- [x] state ("play", "stop", "pause")
+- [x] repeat
+- [ ] shuffle
+- [ ] xfade
+- [x] volume
+- [x] track length/progress
+  - [x] track progress (seek)
+- [ ] track name
+

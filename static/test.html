@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <title>API test</title>
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64" type="image/png" />
+</head>
+<body>
+
+<textarea id="log"></textarea>
+
+<script>
+  // Create WebSocket connection.
+  const socket = new WebSocket("ws://localhost:1323/ws");
+
+  // Connection opened
+  socket.addEventListener("open", (event) => {
+    socket.send("Hello Server!");
+  });
+
+  // Listen for messages
+  socket.addEventListener("message", (event) => {
+    console.log("server: ", event.data);
+
+    if (typeof event.data === "object" && "mpd_status" in event.data) {
+      // {"consume":"0","mixrampdb":"0","partition":"default","playlist":"1","playlistlength":"0","random":"0","repeat":"0","single":"0","state":"stop","volume":"100"}
+
+      // random
+      if ("random" in event.data) {
+        const randomToggle = document.getElementById("randomToggle");
+        randomToggle.checked = event.data.random === "0";
+      }
+      // repeat
+      if ("repeat" in event.data) {
+        const repeatToggle = document.getElementById("repeatToggle");
+        repeatToggle.checked = event.data.repeat === "0";
+      }
+      // state
+      if ("state" in event.data) {
+        const playPauseButton = document.getElementById("playPauseButton");
+        switch (event.data.state) {
+          case "play":
+            playPauseButton.value = "||"
+            break;
+          case "stop":
+          case "pause":
+            playPauseButton.value = ">"
+            break;
+        }
+      }
+      // volume
+      if ("volume" in event.data) {
+        const volumeInput = document.getElementById("volumeInput");
+        volumeInput.value = event.data.volume
+      }
+      // current song
+      if ("elapsed" in event.data && "duration" in event.data) {
+        const seekTrackInput = document.getElementById("trackSeekInput");
+        seekTrackInput.max = event.data.duration;
+        seekTrackInput.value = event.data.elapsed;
+        const currentSongTimeText = document.getElementById("currentSongTimeText");
+        currentSongTimeText.text = event.data.elapsed + " | " + event.data.duration;
+      }
+    }
+  });
+
+  // window.setInterval(() => {
+  //   socket.send("#status")
+  // }, 1000);
+</script>
+</body>
+</html>

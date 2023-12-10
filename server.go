@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/fhs/gompd/v2/mpd"
 	"github.com/labstack/echo-contrib/echoprometheus"
@@ -9,9 +10,9 @@ import (
 	"golang.org/x/net/websocket"
 	"log"
 	"net/http"
-	"strconv"
+	"os"
+	"os/exec"
 	"strings"
-	"time"
 )
 
 func main() {
@@ -56,17 +57,25 @@ func main() {
 	g.GET("/random", toggleRandom)
 	g.GET("/volume/:level", setVolume)
 
+	g.GET("/download", downloadTrack)
+
 	e.GET("/ws", wsServe)
 
-	e.Logger.Fatal(e.StartTLS(":1323", "cert.pem", "key.pem"))
-	//e.Logger.Fatal(e.Start(":1323"))
+	//e.Logger.Fatal(e.StartTLS(":1323", "cert.pem", "key.pem"))
+	e.Logger.Fatal(e.Start(":1323"))
 }
 
 func wsServe(c echo.Context) error {
-	fmt.Println("wsServe")
 	websocket.Handler(func(ws *websocket.Conn) {
 		defer ws.Close()
-		fmt.Println("handler")
+
+		// Connect to MPD server
+		mpdConn, err := mpd.Dial("tcp", "localhost:6600")
+		if err != nil {
+			log.Fatalln(err)
+		}
+		defer mpdConn.Close()
+
 		for {
 			// Read
 			msg := ""
@@ -75,205 +84,66 @@ func wsServe(c echo.Context) error {
 				c.Logger().Error(err)
 				break
 			} else {
-				if strings.HasPrefix(strings.ToUpper(msg), "MPD#") {
-					// Forward MPD communication
-					// TODO: forward request to mpd and response back to client
-					err := websocket.Message.Send(ws, "MPD command received, processing... processing...")
+				log.Println(msg)
+				if strings.ToLower(msg) == "#status" {
+					// TODO: Get current MPD status and return it
+					status, err := mpdConn.Status()
+					if err != nil {
+						log.Fatalln(err)
+					}
+					jsonData, err := json.Marshal(status)
+					if err != nil {
+						log.Fatalln(err)
+					}
+					err = websocket.Message.Send(ws, fmt.Sprintf("{\"mpd_status\":%s}", string(jsonData)))
 					if err != nil {
 						c.Logger().Error(err)
 					}
 
-				} else if strings.HasPrefix(strings.ToUpper(msg), "YT#") {
+				} else if strings.HasPrefix(strings.ToLower(msg), "#download ") {
 					// Download video link as audio file
+					uri := strings.SplitN(msg, " ", 2)[1]
 					// TODO: implement yt-dlp integration
-					err := websocket.Message.Send(ws, "YT-DLP command received, processing... processing...")
+					err := websocket.Message.Send(ws, fmt.Sprintf("Downloading %s", uri))
 					if err != nil {
 						c.Logger().Error(err)
 					}
 				}
 			}
-			//fmt.Println(msg)
 		}
 	}).ServeHTTP(c.Response(), c.Request())
 	return nil
 }
 
-// API calls
+func downloadTrack(c echo.Context) error {
+	// yt-dlp \
+	// --no-wait-for-video \
+	// --no-playlist \
+	// --windows-filenames \
+	// --newline \
+	// --extract-audio \
+	// --audio-format mp3 \
+	// --audio-quality 0 \
+	// -f bestaudio/best \
+	// ${video_url}
 
-func previousTrack(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer conn.Close()
-
-	err = conn.Previous()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return c.String(http.StatusNoContent, "")
-}
-
-func nextTrack(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer conn.Close()
-
-	err = conn.Next()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return c.String(http.StatusNoContent, "")
-}
-
-func stopPlayback(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer conn.Close()
-
-	err = conn.Stop()
-	if err != nil {
+	cmd := exec.Command(
+		"yt-dlp",
+		"--no-wait-for-video",
+		"--no-playlist",
+		"--windows-filenames",
+		"--newline",
+		"--extract-audio",
+		"--audio-format", "mp3",
+		"--audio-quality", "0",
+		"--format", "bestaudio/best",
+		c.Param("url"),
+	)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
 		log.Fatalln(err)
 	}
 
-	return c.String(http.StatusNoContent, "")
-}
-
-func resumePlayback(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer conn.Close()
-
-	err = conn.Pause(false)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return c.String(http.StatusNoContent, "")
-}
-
-func pausePlayback(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer conn.Close()
-
-	err = conn.Pause(true)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return c.String(http.StatusNoContent, "")
-}
-
-func seek(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer conn.Close()
-
-	seconds, err := strconv.Atoi(c.Param("seconds"))
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	if seconds < 0 {
-		return c.String(http.StatusBadRequest, "seconds must be positive integer")
-	}
-
-	err = conn.SeekCur(time.Duration(seconds)*time.Second, false)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return c.String(http.StatusNoContent, "")
-}
-
-func toggleRepeat(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer conn.Close()
-
-	status, err := conn.Status()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	if status["repeat"] == "1" {
-		err = conn.Repeat(false)
-	} else {
-		err = conn.Repeat(true)
-	}
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return c.String(http.StatusNoContent, "")
-}
-
-func toggleRandom(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer conn.Close()
-
-	status, err := conn.Status()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	if status["toggleRandom"] == "1" {
-		err = conn.Random(false)
-	} else {
-		err = conn.Random(true)
-	}
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return c.String(http.StatusNoContent, "")
-}
-
-func setVolume(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer conn.Close()
-
-	level, err := strconv.Atoi(c.Param("level"))
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	if level > 100 || level < 0 {
-		return c.String(http.StatusBadRequest, "Volume must be between 0 and 100")
-	}
-
-	err = conn.SetVolume(level)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return c.String(http.StatusNoContent, "")
+	return c.String(http.StatusAccepted, "")
 }
