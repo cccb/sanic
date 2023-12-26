@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"golang.org/x/net/websocket"
+	"gopkg.in/ini.v1"
 	"log"
 	"net/http"
 	"os"
@@ -15,7 +16,37 @@ import (
 	"strings"
 )
 
+type Config struct {
+	MPD struct {
+		Hostname string `ini:"hostname"`
+		Port     int    `ini:"port"`
+		Username string `ini:"username"`
+		Password string `ini:"password"`
+	} `ini:"mpd"`
+	UI struct {
+		Hostname    string `ini:"hostname"`
+		Port        int    `ini:"port"`
+		Tls         bool   `ini:"tls"`
+		Certificate string `ini:"cert"`
+		Key         string `ini:"key"`
+	} `ini:"ui"`
+}
+
 func main() {
+	iniData, err := ini.Load("config.ini")
+	if err != nil {
+		fmt.Printf("Fail to read configuration file: %v", err)
+		os.Exit(1)
+	}
+
+	var config Config
+
+	err = iniData.MapTo(&config)
+	if err != nil {
+		fmt.Printf("Fail to parse configuration file: %v", err)
+		os.Exit(1)
+	}
+
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
@@ -61,8 +92,11 @@ func main() {
 
 	e.GET("/ws", wsServe)
 
-	//e.Logger.Fatal(e.StartTLS(":1323", "cert.pem", "key.pem"))
-	e.Logger.Fatal(e.Start(":1323"))
+	if config.UI.Tls {
+		e.Logger.Fatal(e.StartTLS(fmt.Sprintf("%s:%d", config.UI.Hostname, config.UI.Port), config.UI.Certificate, config.UI.Key))
+	} else {
+		e.Logger.Fatal(e.Start(fmt.Sprintf("%s:%d", config.UI.Hostname, config.UI.Port)))
+	}
 }
 
 func wsServe(c echo.Context) error {

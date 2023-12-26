@@ -7,6 +7,7 @@ require (
 	github.com/labstack/echo-contrib v0.15.0
 	github.com/labstack/echo/v4 v4.11.2
 	golang.org/x/net v0.17.0
+	gopkg.in/ini.v1 v1.67.0
 )
 
 require (
