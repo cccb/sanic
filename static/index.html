@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sanic</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<main>
+  <div id="nav">
+    <div>
+      <button>Login</button>
+      <button>Config</button>
+    </div>
+    <div>
+      <div>
+        <button>&#x23EE;&#xFE0E;</button> <!-- ⏮️ Last Track Button -->
+        <button>&#x23F9;&#xFE0E;</button> <!-- ⏹️ Stop Button -->
+        <button>&#x23EF;&#xFE0E;</button> <!-- ⏯️ Play or Pause Button -->
+        <button>&#x23ED;&#xFE0E;</button> <!-- ⏭️ Next Track Button -->
+      </div>
+      <div>
+        <label for="progress"></label>
+        <input type="range" id="progress" name="progress" min="0" max="100" value="0" />
+      </div>
+    </div>
+    <div>
+      baz
+    </div>
+  </div>
+  <div id="queue">
+    <table>
+      <thead>
+      <tr>
+        <td>Pos</td>
+        <td>Artists</td>
+        <td>Track</td>
+        <td>Album</td>
+        <td>Length</td>
+        <td>Actions</td>
+      </tr>
+      </thead>
+      <tbody id="queue_table"></tbody>
+    </table>
+  </div>
+  <div id="browser">browser</div>
+  <div id="result">result</div>
+</main>
+<script>
+  // create example elements in queue
+  const queue = document.getElementById("queue_table");
+  for (let i = 0; i < 100; i++) {
+    const tr = document.createElement("tr");
+
+    const pos = document.createElement("td");
+    pos.appendChild(document.createTextNode(i.toString()));
+    tr.appendChild(pos);
+
+    const artist = document.createElement("td");
+    artist.appendChild(document.createTextNode(`Artist ${i.toString()}`));
+    tr.appendChild(artist);
+
+    const track = document.createElement("td");
+    track.appendChild(document.createTextNode(`Track ${i.toString()}`));
+    tr.appendChild(track);
+
+    const album = document.createElement("td");
+    album.appendChild(document.createTextNode(`Album ${i.toString()}`));
+    tr.appendChild(album);
+
+    const length = document.createElement("td");
+    length.appendChild(document.createTextNode("1:23"));
+    tr.appendChild(length);
+
+    const actions = document.createElement("td");
+    const del = document.createElement("button");
+    del.innerHTML = "&#x1f5d1;";
+    actions.appendChild(del);
+    tr.appendChild(actions);
+
+    queue.appendChild(tr);
+  }
+</script>
+</body>
+</html>

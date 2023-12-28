@@ -1,0 +1,42 @@
+html, body { margin: 0; height: 100%; }
+
+main {
+  height: 100%;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 150px 1fr 1fr;
+  gap: 0 0;
+  grid-template-areas: "nav nav" "queue queue" "browser result";
+}
+
+#queue {
+  grid-area: queue;
+  overflow: auto;
+}
+
+#nav {
+  grid-area: nav;
+  display: flex;
+}
+
+#nav
+
+#result {
+  grid-area: result;
+  overflow: auto;
+}
+
+#browser {
+  grid-area: browser;
+}
+
+table {
+  width: 100%;
+}
+
+
+/* debug */
+div {
+  border: 1px solid blue;
+}
