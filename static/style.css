@@ -1,3 +1,7 @@
+/* #################### */
+/* ####### main ####### */
+/* #################### */
+
 html, body { margin: 0; height: 100%; }
 
 main {
@@ -20,8 +24,6 @@ main {
   display: flex;
 }
 
-#nav
-
 #result {
   grid-area: result;
   overflow: auto;
@@ -35,8 +37,28 @@ table {
   width: 100%;
 }
 
+/* #################### */
+/* ###### debug ####### */
+/* #################### */
 
-/* debug */
 div {
   border: 1px solid blue;
+}
+
+/* #################### */
+/* ### pretty stuff ### */
+/* #################### */
+
+/* Disable arrows in input */
+
+/* Chrome, Safari, Edge, Opera */
+#control-xfade::-webkit-outer-spin-button,
+#control-xfade::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#control-xfade[type=number] {
+  -moz-appearance: textfield;
 }

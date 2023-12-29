@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Sanic</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64" type="image/png" />
 </head>
 <body>
 <main>
@@ -11,21 +12,39 @@
     <div>
       <button>Login</button>
       <button>Config</button>
+      <button id="control-update-db" disabled="disabled">Update DB</button>
     </div>
     <div>
       <div>
-        <button>&#x23EE;&#xFE0E;</button> <!-- ⏮️ Last Track Button -->
-        <button>&#x23F9;&#xFE0E;</button> <!-- ⏹️ Stop Button -->
-        <button>&#x23EF;&#xFE0E;</button> <!-- ⏯️ Play or Pause Button -->
-        <button>&#x23ED;&#xFE0E;</button> <!-- ⏭️ Next Track Button -->
+        <button id="control-previous">&#x23EE;&#xFE0E;</button> <!-- ⏮️ Last Track Button -->
+        <button id="control-stop">&#x23F9;&#xFE0E;</button> <!-- ⏹️ Stop Button -->
+        <button id="control-play-pause">&#x23F5;&#xFE0E;</button> <!-- ▶️ Play or ⏸️ Pause Button -->
+        <button id="control-next">&#x23ED;&#xFE0E;</button> <!-- ⏭️ Next Track Button -->
       </div>
       <div>
-        <label for="progress"></label>
-        <input type="range" id="progress" name="progress" min="0" max="100" value="0" />
+        <label for="control-progress"></label>
+        <input type="range" id="control-progress" name="progress" min="0" step="1" />
       </div>
     </div>
     <div>
-      baz
+      <div>
+        <div>
+          <div>
+            <label for="control-repeat">repeat</label>
+            <input type="checkbox" id="control-repeat" name="repeat" />
+          </div>
+          <div>
+            <label for="control-shuffle">shuffle</label>
+            <input type="checkbox" id="control-shuffle" name="shuffle" />
+          </div>
+        </div>
+        <div>
+          <label for="control-xfade">xfade</label>
+          <button id="control-xfade-minus">&#x2796;</button>
+          <input type="number" id="control-xfade" name="xfade" value="00" />
+          <button id="control-xfade-plus">&#x2795;</button>
+        </div>
+      </div>
     </div>
   </div>
   <div id="queue">
@@ -40,15 +59,16 @@
         <td>Actions</td>
       </tr>
       </thead>
-      <tbody id="queue_table"></tbody>
+      <tbody></tbody>
     </table>
   </div>
   <div id="browser">browser</div>
   <div id="result">result</div>
 </main>
+<script src="controls.js"></script>
 <script>
   // create example elements in queue
-  const queue = document.getElementById("queue_table");
+  const queue = document.querySelector("#queue tbody");
   for (let i = 0; i < 100; i++) {
     const tr = document.createElement("tr");
 
