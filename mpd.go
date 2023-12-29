@@ -11,6 +11,22 @@ import (
 
 // MPD API calls
 
+func updateDb(c echo.Context) error {
+	// Connect to MPD server
+	conn, err := mpd.Dial("tcp", "localhost:6600")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer conn.Close()
+
+	jobId, err := conn.Update("")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return c.String(http.StatusOK, strconv.Itoa(jobId))
+}
+
 func previousTrack(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")

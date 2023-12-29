@@ -78,6 +78,7 @@ func main() {
 	})
 
 	g := e.Group("/api")
+	g.GET("/update_db", updateDb)
 	g.GET("/previous_track", previousTrack)
 	g.GET("/next_track", nextTrack)
 	g.GET("/stop", stopPlayback)
