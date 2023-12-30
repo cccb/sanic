@@ -1,5 +1,5 @@
 /* #################### */
-/* ####### main ####### */
+/* #### structure ##### */
 /* #################### */
 
 html, body { margin: 0; height: 100%; }
@@ -37,6 +37,21 @@ table {
   width: 100%;
 }
 
+#control-admin {
+  display: flex;
+  flex-direction: column;
+}
+
+#sanic-logo {
+  max-width: 80%;
+  max-height: 80%;
+}
+
+.spaced {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* #################### */
 /* ###### debug ####### */
 /* #################### */
@@ -62,3 +77,58 @@ div {
 #control-xfade[type=number] {
   -moz-appearance: textfield;
 }
+
+#control-xfade {
+  width: 2em;
+}
+
+#control-previous,
+#control-play-pause,
+#control-stop,
+#control-next {
+  width: 2.5em;
+  height: 2.5em;
+  text-align: center;
+}
+
+/*
+#control-track {
+  transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  animation: scroll-left 20s linear infinite;
+  -moz-animation: scroll-left 2s linear infinite;
+  -webkit-animation: scroll-left 2s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+    -moz-transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+  }
+}
+
+@-moz-keyframes scroll-left {
+  0% {
+    -moz-transform: translateX(100%);
+  }
+  100% {
+    -moz-transform: translateX(-100%);
+  }
+}
+
+@-webkit-keyframes scroll-left {
+  0% {
+    -webkit-transform: translateX(100%);
+  }
+  100% {
+    -webkit-transform: translateX(-100%);
+  }
+}
+*/

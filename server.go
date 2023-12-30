@@ -107,7 +107,12 @@ func wsServe(c echo.Context) error {
 		// Connect to MPD server
 		mpdConn, err := mpd.Dial("tcp", "localhost:6600")
 		if err != nil {
-			log.Fatalln(err)
+			//log.Fatalln(err)
+			c.Logger().Error(err)
+			err = websocket.Message.Send(ws, fmt.Sprintf("{\"mpd_error\":\"%s\"}", err.Error()))
+			if err != nil {
+				c.Logger().Error(err)
+			}
 		}
 		defer mpdConn.Close()
 
@@ -121,16 +126,23 @@ func wsServe(c echo.Context) error {
 			} else {
 				log.Println(msg)
 				if strings.ToLower(msg) == "#status" {
-					// TODO: Get current MPD status and return it
 					status, err := mpdConn.Status()
 					if err != nil {
-						log.Fatalln(err)
+						c.Logger().Error(err)
 					}
-					jsonData, err := json.Marshal(status)
+					currentsong, err := mpdConn.CurrentSong()
 					if err != nil {
-						log.Fatalln(err)
+						c.Logger().Error(err)
 					}
-					err = websocket.Message.Send(ws, fmt.Sprintf("{\"mpd_status\":%s}", string(jsonData)))
+					jsonStatus, err := json.Marshal(status)
+					if err != nil {
+						c.Logger().Error(err)
+					}
+					jsonCurrentSong, err := json.Marshal(currentsong)
+					if err != nil {
+						c.Logger().Error(err)
+					}
+					err = websocket.Message.Send(ws, fmt.Sprintf("{\"mpd_status\":%s,\"mpd_current_song\":%s}", string(jsonStatus), string(jsonCurrentSong)))
 					if err != nil {
 						c.Logger().Error(err)
 					}

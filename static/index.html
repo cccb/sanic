@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8" />
   <title>Sanic</title>
@@ -9,13 +9,14 @@
 <body>
 <main>
   <div id="nav">
-    <div>
+    <div id="control-admin">
+      <button id="connection-state">&#x274C; Disconnected</button> <!-- ❌ Cross Mark -->
       <button>Login</button>
       <button>Config</button>
       <button id="control-update-db" disabled="disabled">Update DB</button>
     </div>
     <div>
-      <div>
+      <div class="spaced">
         <button id="control-previous">&#x23EE;&#xFE0E;</button> <!-- ⏮️ Last Track Button -->
         <button id="control-stop">&#x23F9;&#xFE0E;</button> <!-- ⏹️ Stop Button -->
         <button id="control-play-pause">&#x23F5;&#xFE0E;</button> <!-- ▶️ Play or ⏸️ Pause Button -->
@@ -27,24 +28,38 @@
       </div>
     </div>
     <div>
-      <div>
+      <div class="spaced">
+        <button id="control-repeat">&#x1F518; repeat</button>
+        <button id="control-shuffle">&#x1F518; shuffle</button>
+      </div>
+      <div class="spaced">
+        <label for="control-xfade">xfade</label>
         <div>
-          <div>
-            <label for="control-repeat">repeat</label>
-            <input type="checkbox" id="control-repeat" name="repeat" />
-          </div>
-          <div>
-            <label for="control-shuffle">shuffle</label>
-            <input type="checkbox" id="control-shuffle" name="shuffle" />
-          </div>
-        </div>
-        <div>
-          <label for="control-xfade">xfade</label>
           <button id="control-xfade-minus">&#x2796;</button>
           <input type="number" id="control-xfade" name="xfade" value="00" />
           <button id="control-xfade-plus">&#x2795;</button>
         </div>
       </div>
+      <div class="spaced">
+        <button id="control-volume-down">&#x1F509;</button> <!-- 🔉 Speaker with sound wave -->
+        <input id="control-volume" name="volume" type="range" min="0" max="100" value="50" />
+        <button id="control-volume-up">&#x1F50A;</button> <!-- 🔊 Speaker with sound waves -->
+      </div>
+    </div>
+    <div>
+      <p>Now playing:</p>
+      <div>
+        <label for="control-track">Track:</label>
+        <input type="text" id="control-track" name="track" disabled="disabled" />
+      </div>
+      <div>
+        <label for="control-time">Time:</label>
+        <input type="text" id="control-time" name="time" value="00:00:00/00:00:00" disabled="disabled" />
+      </div>
+    </div>
+    <div>
+      <img id="sanic-logo" alt="sanic logo" src="/img/sanic-logo.webp" />
+      <div>Sanic &copy; 2023</div>
     </div>
   </div>
   <div id="queue">
