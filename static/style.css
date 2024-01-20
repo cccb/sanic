@@ -300,6 +300,17 @@ table tr:hover td {
   border-right: 4px ridge #3a506b;
 }
 
+#control-playlist-list {
+  font-size: 12pt;
+  width: 100%;
+  background-color: #28374a;
+  color: white;
+  border: 1px solid black;
+  border-right-color: #545454;
+  border-bottom-color: #545454;
+  scrollbar-color: #490b00 #09101d;  /* only in firefox: https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color */
+}
+
 footer svg {
   color: white;
   width: 12pt;
