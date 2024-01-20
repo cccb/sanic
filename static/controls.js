@@ -190,6 +190,54 @@ socket.addEventListener("message", (e) => {
     }
   }
 
+  // update queue
+  if ("mpd_queue" in msg && msg.mpd_queue != null) {
+    const tbody = document.createElement("tbody");
+    msg.mpd_queue.forEach(elem => {
+      const tr = document.createElement("tr");
+      const pos = document.createElement("td");
+      pos.innerText = elem.Pos;
+      const artist = document.createElement("td");
+      if ("Artist" in elem) {
+        artist.innerText = elem.Artist;
+      }
+      const track = document.createElement("td");
+      if ("Title" in elem) {
+        track.innerText = elem.Title;
+      } else {
+        track.innerText = elem.file;
+      }
+      const album = document.createElement("td");
+      // album.innerText = "";
+      const length = document.createElement("td");
+      const duration_hours = Math.floor(elem.duration / 3600);
+      const duration_minutes = Math.floor((elem.duration - duration_hours * 3600) / 60);
+      const duration_seconds = Math.floor(elem.duration - duration_hours * 3600 - duration_minutes * 60);
+      length.innerText = `${duration_hours}:${duration_minutes.toString().padStart(2, '0')}:${duration_seconds.toString().padStart(2, '0')}`;
+      const actions = document.createElement("td");
+      const del = document.createElement("button");
+      del.innerHTML = "&#x1F5D1;&#xFE0F;";
+      del.addEventListener("click", e => {
+        fetch(`${API_URL}/queue_del/${elem.Pos}`).then(r => {
+          console.log(r.text());
+        })
+      });
+      actions.appendChild(del);
+      tr.appendChild(pos);
+      tr.appendChild(artist);
+      tr.appendChild(track);
+      tr.appendChild(album);
+      tr.appendChild(length);
+      tr.appendChild(actions);
+      tbody.appendChild(tr);
+    });
+    const currentQueue = document.querySelector("#queue tbody")
+    if (currentQueue.innerHTML !== tbody.innerHTML) {
+      console.log("Updating queue")
+      currentQueue.outerHTML = tbody.outerHTML;
+    }
+  }
+
   if ("mpd_error" in msg) {
     console.error(`MPD Error: ${msg.mpd_error}`)
   }

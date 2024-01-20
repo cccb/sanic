@@ -134,6 +134,10 @@ func wsServe(c echo.Context) error {
 					if err != nil {
 						c.Logger().Error(err)
 					}
+					queue, err := mpdConn.PlaylistInfo(-1, -1)
+					if err != nil {
+						c.Logger().Error(err)
+					}
 					jsonStatus, err := json.Marshal(status)
 					if err != nil {
 						c.Logger().Error(err)
@@ -142,7 +146,11 @@ func wsServe(c echo.Context) error {
 					if err != nil {
 						c.Logger().Error(err)
 					}
-					err = websocket.Message.Send(ws, fmt.Sprintf("{\"mpd_status\":%s,\"mpd_current_song\":%s}", string(jsonStatus), string(jsonCurrentSong)))
+					jsonQueue, err := json.Marshal(queue)
+					if err != nil {
+						c.Logger().Error(err)
+					}
+					err = websocket.Message.Send(ws, fmt.Sprintf("{\"mpd_status\":%s,\"mpd_current_song\":%s,\"mpd_queue\":%s}", string(jsonStatus), string(jsonCurrentSong), string(jsonQueue)))
 					if err != nil {
 						c.Logger().Error(err)
 					}

@@ -29,3 +29,11 @@
   - [x] track progress (seek)
 - [ ] track name
 
+
+# foo
+
+- client: connect websocket
+- server: on_connect: send full state
+- server: subscribe to changes
+- server: on_change: send to client
+

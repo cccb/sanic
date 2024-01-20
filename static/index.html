@@ -14,14 +14,14 @@
       <button>Login</button>
       <button>Config</button>
       <button id="control-update-db" disabled="disabled">Update DB</button>
-    </div>
+    </div><!--/#control-admin-->
     <div>
       <div class="spaced">
         <button id="control-previous">&#x23EE;&#xFE0E;</button> <!-- ⏮️ Last Track Button -->
         <button id="control-stop">&#x23F9;&#xFE0E;</button> <!-- ⏹️ Stop Button -->
         <button id="control-play-pause">&#x23F5;&#xFE0E;</button> <!-- ▶️ Play or ⏸️ Pause Button -->
         <button id="control-next">&#x23ED;&#xFE0E;</button> <!-- ⏭️ Next Track Button -->
-      </div>
+      </div><!--/.spaced-->
       <div>
         <label for="control-progress"></label>
         <input type="range" id="control-progress" name="progress" min="0" step="1" />
@@ -31,7 +31,7 @@
       <div class="spaced">
         <button id="control-repeat">&#x1F518; repeat</button>
         <button id="control-shuffle">&#x1F518; shuffle</button>
-      </div>
+      </div><!--/.spaced-->
       <div class="spaced">
         <label for="control-xfade">xfade</label>
         <div>
@@ -39,12 +39,12 @@
           <input type="number" id="control-xfade" name="xfade" value="00" />
           <button id="control-xfade-plus">&#x2795;</button>
         </div>
-      </div>
+      </div><!--/.spaced-->
       <div class="spaced">
         <button id="control-volume-down">&#x1F509;</button> <!-- 🔉 Speaker with sound wave -->
         <input id="control-volume" name="volume" type="range" min="0" max="100" value="50" />
         <button id="control-volume-up">&#x1F50A;</button> <!-- 🔊 Speaker with sound waves -->
-      </div>
+      </div><!--/.spaced-->
     </div>
     <div>
       <p>Now playing:</p>
@@ -57,21 +57,23 @@
         <input type="text" id="control-time" name="time" value="00:00:00/00:00:00" disabled="disabled" />
       </div>
     </div>
-    <div>
-      <img id="sanic-logo" alt="sanic logo" src="/img/sanic-logo.webp" />
-      <div>Sanic &copy; 2023</div>
+    <div id="sanic-logo">
+      <div>
+        <img alt="sanic logo" src="/img/sanic-logo.webp" />
+        Sanic &copy; 2023
+      </div>
     </div>
   </div>
   <div id="queue">
     <table>
       <thead>
       <tr>
-        <td>Pos</td>
-        <td>Artists</td>
-        <td>Track</td>
-        <td>Album</td>
-        <td>Length</td>
-        <td>Actions</td>
+        <th>Pos</th>
+        <th>Artists</th>
+        <th>Track</th>
+        <th>Album</th>
+        <th>Length</th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody></tbody>
@@ -79,42 +81,62 @@
   </div>
   <div id="browser">browser</div>
   <div id="result">result</div>
+  <footer>
+    <a href="https://git.berlin.ccc.de/cccb/sanic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 92"><defs><clipPath id="a"><path d="M0 .113h91.887V92H0Zm0 0"/></clipPath></defs><g clip-path="url(#a)"><path style="stroke:none;fill-rule:nonzero;fill:#ffffff;fill-opacity:1" d="M90.156 41.965 50.036 1.848a5.913 5.913 0 0 0-8.368 0l-8.332 8.332 10.566 10.566a7.03 7.03 0 0 1 7.23 1.684 7.043 7.043 0 0 1 1.673 7.277l10.183 10.184a7.026 7.026 0 0 1 7.278 1.672 7.04 7.04 0 0 1 0 9.957 7.045 7.045 0 0 1-9.961 0 7.038 7.038 0 0 1-1.532-7.66l-9.5-9.497V59.36a7.04 7.04 0 0 1 1.86 11.29 7.04 7.04 0 0 1-9.957 0 7.04 7.04 0 0 1 0-9.958 7.034 7.034 0 0 1 2.308-1.539V33.926a7.001 7.001 0 0 1-2.308-1.535 7.049 7.049 0 0 1-1.516-7.7L29.242 14.273 1.734 41.777a5.918 5.918 0 0 0 0 8.371L41.855 90.27a5.92 5.92 0 0 0 8.368 0l39.933-39.934a5.925 5.925 0 0 0 0-8.371"/></g></svg></a> Sanic MPD Web UI 0.1.0 - by XenGi and coon &copy; 2023
+  </footer>
 </main>
 <script src="controls.js"></script>
 <script>
-  // create example elements in queue
-  const queue = document.querySelector("#queue tbody");
-  for (let i = 0; i < 100; i++) {
-    const tr = document.createElement("tr");
-
-    const pos = document.createElement("td");
-    pos.appendChild(document.createTextNode(i.toString()));
-    tr.appendChild(pos);
-
-    const artist = document.createElement("td");
-    artist.appendChild(document.createTextNode(`Artist ${i.toString()}`));
-    tr.appendChild(artist);
-
-    const track = document.createElement("td");
-    track.appendChild(document.createTextNode(`Track ${i.toString()}`));
-    tr.appendChild(track);
-
-    const album = document.createElement("td");
-    album.appendChild(document.createTextNode(`Album ${i.toString()}`));
-    tr.appendChild(album);
-
-    const length = document.createElement("td");
-    length.appendChild(document.createTextNode("1:23"));
-    tr.appendChild(length);
-
-    const actions = document.createElement("td");
-    const del = document.createElement("button");
-    del.innerHTML = "&#x1f5d1;";
-    actions.appendChild(del);
-    tr.appendChild(actions);
-
-    queue.appendChild(tr);
+const table = document.querySelector("#queue > table > tbody");
+for (let i = 1; i <= 100; i++) {
+  const tr = document.createElement("tr");
+  if (i === 1) {
+    tr.classList.add("playing");
   }
+  const pos = document.createElement("td");
+  pos.innerText = i.toString();
+  const artist = document.createElement("td");
+  artist.innerText = `Artist ${i.toString()} with a super long name that should finally bring the length to a maximum`;
+  const track = document.createElement("td");
+  track.innerText = `Track ${i.toString()} with super long name that could potentially expand the table by a lot!`;
+  const album = document.createElement("td");
+  album.innerText = `Album ${i.toString()}`;
+  const length = document.createElement("td");
+  length.innerText = "01:00:00";
+  const actions = document.createElement("td");
+  actions.classList.add("actions");
+  // TODO: maybe use a instead of button?
+  const moveUp = document.createElement("button");
+  moveUp.classList.add("borderless");
+  moveUp.innerHTML = "&#x1F53A;"; // 🔺 Red Triangle Pointed Down
+  moveUp.addEventListener("click", event => {
+    console.log(`DEBUG: move song ${i} up`);
+  });
+  // TODO: maybe use a instead of button?
+  const moveDown = document.createElement("button");
+  moveDown.classList.add("borderless");
+  moveDown.innerHTML = "&#x1F53B;"; // 🔻 Red Triangle Pointed Up
+  moveDown.addEventListener("click", event => {
+    console.log(`DEBUG: move song ${i} down`);
+  });
+  // TODO: maybe use a instead of button?
+  const remove = document.createElement("button");
+  remove.classList.add("borderless");
+  remove.innerHTML = "&#x274C;"; // ❌ Cross mark; 🗑️ Wastebasket
+  remove.addEventListener("click", event => {
+    console.log(`DEBUG: remove song ${i} from queue`);
+  });
+  actions.appendChild(moveUp);
+  actions.appendChild(moveDown);
+  actions.appendChild(remove);
+  tr.appendChild(pos);
+  tr.appendChild(artist);
+  tr.appendChild(track);
+  tr.appendChild(album);
+  tr.appendChild(length);
+  tr.appendChild(actions);
+  table.appendChild(tr);
+}
 </script>
 </body>
 </html>
