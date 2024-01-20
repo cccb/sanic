@@ -21,6 +21,45 @@ const control_volume_down = document.getElementById("control-volume-down");
 const queue_table = document.querySelector("#queue tbody");
 const control_track = document.getElementById("control-track");
 const control_time = document.getElementById("control-time");
+const tabs = document.getElementById("tabs");
+const tab_browser = document.getElementById("tab-browser");
+const tab_search = document.getElementById("tab-search");
+const tab_playlists = document.getElementById("tab-playlists");
+
+// UI controls
+
+tab_browser.addEventListener("click", e => {
+  if (!tab_browser.classList.contains("active")) {
+    tab_browser.classList.add("active");
+    tab_search.classList.remove("active")
+    tab_playlists.classList.remove("active")
+    document.getElementById("file-browser").style.display = "block";
+    document.getElementById("search").style.display = "none";
+    document.getElementById("playlist-browser").style.display = "none";
+  }
+});
+
+tab_search.addEventListener("click", e => {
+  if (!tab_search.classList.contains("active")) {
+    tab_browser.classList.remove("active");
+    tab_search.classList.add("active")
+    tab_playlists.classList.remove("active")
+    document.getElementById("file-browser").style.display = "none";
+    document.getElementById("search").style.display = "block";
+    document.getElementById("playlist-browser").style.display = "none";
+  }
+});
+
+tab_playlists.addEventListener("click", e => {
+  if (!tab_playlists.classList.contains("active")) {
+    tab_browser.classList.remove("active");
+    tab_search.classList.remove("active")
+    tab_playlists.classList.add("active")
+    document.getElementById("file-browser").style.display = "none";
+    document.getElementById("search").style.display = "none";
+    document.getElementById("playlist-browser").style.display = "block";
+  }
+});
 
 // Add API calls to controls
 
