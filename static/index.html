@@ -7,6 +7,17 @@
   <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64" type="image/png" />
 </head>
 <body>
+
+<dialog id="save-playlist">
+  <h1>Save Playlist</h1>
+  <button class="close">&times;</button>
+  <form method="dialog">
+    <label for="control-playlist-name">Name</label>
+    <input type="text" id="control-playlist-name" name="playlist-name" autofocus />
+    <button>Save</button>
+  </form>
+</dialog>
+
 <main>
   <div id="nav">
     <div id="control-admin">
@@ -48,7 +59,10 @@
     <div class="wide">
       <div>
         <label for="control-track">Now playing:</label>
-        <input type="text" id="control-track" name="track" disabled="disabled" />
+        <!--<input type="text" id="control-track" name="track" disabled="disabled" />-->
+        <div class="marquee" id="control-track">
+          <span>Fall On Your Sword - Shatner Of The Mount by Fall On Your Sword</span>
+        </div>
       </div>
       <div>
         <label for="control-time">Time:</label>
@@ -107,9 +121,10 @@
         <option value="1">basedrive</option><!-- TODO: Remove this line -->
       </select><!--/#control-playlist-list-->
       <div>
-        <button>&#x2795; New</button><!-- ➕ Plus -->
-        <button>&#x2B06; Attach</button><!-- ⬆️ Up Arrow -->
-        <button>&#x1F5D1;&#xFE0F; Delete</button><!-- 🗑️ Wastebasket -->
+        <button id="control-replace-playlist">&#x1F504; Replace</button><!-- 🔄 Counterclockwise Arrows Button -->
+        <button id="control-attach-playlist">&#x2B06; Attach</button><!-- ⬆️ Up Arrow -->
+        <button id="control-save-playlist">&#x1F4BE; Save</button><!-- 💾 Floppy Disk -->
+        <button id="control-delete-playlist">&#x1F5D1;&#xFE0F; Delete</button><!-- 🗑️ Wastebasket -->
       </div>
     </div><!--/#playlist-browser-->
   </div><!--/#browser-->

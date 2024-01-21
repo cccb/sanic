@@ -3,6 +3,11 @@ const VOLUME_STEP = 5;
 
 // Get control elements
 
+const dialog_save_playlist = document.getElementById("save-playlist");
+const control_playlist_name = document.getElementById("control-playlist-name");
+const dialog_save_playlist_submit = document.querySelector("#save-playlist button");
+const dialog_save_playlist_close = document.querySelector("#save-playlist .close");
+
 const connection_state = document.getElementById("connection-state");
 const control_update_db = document.getElementById("control-update-db");
 const control_previous = document.getElementById("control-previous");
@@ -25,8 +30,56 @@ const tabs = document.getElementById("tabs");
 const tab_browser = document.getElementById("tab-browser");
 const tab_search = document.getElementById("tab-search");
 const tab_playlists = document.getElementById("tab-playlists");
+const control_playlist_list = document.getElementById("control-playlist-list");
+const control_replace_playlist = document.getElementById("control-replace-playlist");
+const control_attach_playlist = document.getElementById("control-attach-playlist");
+const control_save_playlist = document.getElementById("control-save-playlist");
+const control_delete_playlist = document.getElementById("control-delete-playlist");
 
 // UI controls
+
+control_replace_playlist.addEventListener("click", e => {
+  fetch(`${API_URL}/`).then(async r => {
+    if (r.status !== 200) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
+});
+
+control_attach_playlist.addEventListener("click", e => {
+  fetch(`${API_URL}/`).then(async r => {
+    if (r.status !== 200) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
+});
+
+control_save_playlist.addEventListener("click", e => {
+  dialog_save_playlist.showModal()
+});
+
+dialog_save_playlist_close.addEventListener("click", e => {
+  dialog_save_playlist.close()
+});
+
+dialog_save_playlist_submit.addEventListener("click", e => {
+  fetch(`${API_URL}/playlists`, {method: "PUT"}).then(async r => {
+    if (r.status === 201) {
+      console.log(`Playlist "${control_playlist_name.value}" saved`)
+    }
+  });
+});
+
+control_delete_playlist.addEventListener("click", e => {
+  const playlist_id = control_playlist_list.value;
+  fetch(`${API_URL}/playlists/${playlist_id}`, {method: "DELETE"}).then(r => {
+    if (r.status === 204) {
+      console.log(`Playlist ${playlist_id} successfully deleted.`);
+    } else {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
+});
 
 tab_browser.addEventListener("click", e => {
   if (!tab_browser.classList.contains("active")) {
@@ -68,31 +121,55 @@ control_update_db.addEventListener("click", e => {
   fetch(`${API_URL}/update_db`).then(async r => {
     if (r.status === 200) {
       const job_id = await r.text();
-      console.log(`Update started (Job ID: ${job_id})`)
+      console.log(`Update started (Job ID: ${job_id})`);
       e.target.disabled = true;
     } else {
-      console.error(`API returned ${r.status}: ${r.statusText}`)
+      console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
 control_previous.addEventListener("click", e => {
-  fetch(`${API_URL}/previous_track`);
+  fetch(`${API_URL}/previous_track`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
 });
 control_play_pause.addEventListener("click", e => {
   if (e.target.innerHTML === "&#x23F5;&#xFE0E;") {  // TODO: check is never true
-    fetch(`${API_URL}/pause`);
+    fetch(`${API_URL}/pause`).then(async r => {
+      if (200 >= r.status < 300) {
+        console.error(`API returned ${r.status}: ${r.statusText}`);
+      }
+    });
   } else {  // Pause
-    fetch(`${API_URL}/play`);
+    fetch(`${API_URL}/play`).then(async r => {
+      if (200 >= r.status < 300) {
+        console.error(`API returned ${r.status}: ${r.statusText}`);
+      }
+    });
   }
 });
 control_stop.addEventListener("click", e => {
-  fetch(`${API_URL}/stop`);
+  fetch(`${API_URL}/stop`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
 });
 control_next.addEventListener("click", e => {
-  fetch(`${API_URL}/next_track`);
+  fetch(`${API_URL}/next_track`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
 });
 control_progress.addEventListener("change", e => {
-  fetch(`${API_URL}/seek/${e.target.value}`)
+  fetch(`${API_URL}/seek/${e.target.value}`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
 });
 control_repeat.addEventListener("click", e => {
   if (e.target.dataset.state === "on") {  // TODO: check is never true
@@ -102,7 +179,11 @@ control_repeat.addEventListener("click", e => {
     e.target.innerHTML = "&#x1F534; repeat";
     e.target.dataset.state = "on";
   }
-  fetch(`${API_URL}/repeat`);
+  fetch(`${API_URL}/repeat`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
 });
 control_shuffle.addEventListener("click", e => {
   if (e.target.dataset.state === "on") {  // TODO: check is never true
@@ -112,29 +193,53 @@ control_shuffle.addEventListener("click", e => {
     e.target.innerHTML = "&#x1F534; shuffle";
     e.target.dataset.state = "on";
   }
-  fetch(`${API_URL}/random`);
+  fetch(`${API_URL}/random`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
 });
 control_xfade_minus.addEventListener("click", e => {
   // TODO: not yet implemented
-  fetch(`${API_URL}/xfade`);
+  fetch(`${API_URL}/xfade`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
 });
 control_xfade_plus.addEventListener("click", e => {
   // TODO: not yet implemented
-  fetch(`${API_URL}/xfade`);
+  fetch(`${API_URL}/xfade`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
 });
 control_volume_up.addEventListener("click", e => {
   const v = Math.min(parseInt(control_volume.value) + VOLUME_STEP, 100);
-  fetch(`${API_URL}/volume/${v}`);
+  fetch(`${API_URL}/volume/${v}`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
   control_volume.value = v;
 
 });
 control_volume_down.addEventListener("click", e => {
   const v = Math.max(parseInt(control_volume.value) - VOLUME_STEP, 0);
-  fetch(`${API_URL}/volume/${v}`);
+  fetch(`${API_URL}/volume/${v}`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
   control_volume.value = v;
 });
 control_volume.addEventListener("change", e => {
-  fetch(`${API_URL}/volume/${e.target.value}`);
+  fetch(`${API_URL}/volume/${e.target.value}`).then(async r => {
+    if (200 >= r.status < 300) {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  });
 });
 
 // Create WebSocket connection.
@@ -231,10 +336,14 @@ socket.addEventListener("message", (e) => {
 
   // update song info
   if ("mpd_current_song" in msg && msg.mpd_current_song != null) {
+    let track;
     if ("Artist" in msg.mpd_current_song && "Title" in msg.mpd_current_song) {
-      control_track.value = `${msg.mpd_current_song.Artist} - ${msg.mpd_current_song.Title}`
+      track = `<span>${msg.mpd_current_song.Artist} - ${msg.mpd_current_song.Title}</span>`
     } else {
-      control_track.value = msg.mpd_current_song.file;
+      track = `<span>${msg.mpd_current_song.file}</span>`;
+    }
+    if (control_track.innerHTML.toString() !== track) {
+      control_track.innerHTML = track;
     }
   }
 

@@ -4,6 +4,10 @@
 
   --background-color: #041936;
   --text-color: #bbb;
+
+  --input-background-color: #28374a;
+  --input-border-light: #545454;
+  --input-border-dark: #3a3a3a;
 }
 
 /* #################### */
@@ -193,12 +197,12 @@ a {
 }
 
 button {
-  background-color: #28374a;
+  background-color: var(--input-background-color);
   color: var(--text-color);
-  border-top-color: #545454;
-  border-right-color: #3a3a3a;
-  border-bottom-color: #3a3a3a;
-  border-left-color: #545454;
+  border-top-color: var(--input-border-light);
+  border-right-color: var(--input-border-dark);
+  border-bottom-color: var(--input-border-dark);
+  border-left-color: var(--input-border-light);
 }
 
 button[disabled] {
@@ -241,11 +245,47 @@ button .loader {
 }
 
 input[type=text] {
-  background-color: #28374a;
+  background-color: var(--input-background-color);
   color: var(--text-color);
   border: 1px solid black;
-  border-right-color: #545454;
-  border-bottom-color: #545454;
+  border-right-color: var(--input-border-light);
+  border-bottom-color: var(--input-border-light);
+}
+
+.marquee {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  width: var(--ribbon-width);
+  font-size: 10pt;
+  background-color: var(--input-background-color);
+  color: var(--text-color);
+  border: 1px solid black;
+  border-right-color: var(--input-border-light);
+  border-bottom-color: var(--input-border-light);
+  container-type: inline-size;
+}
+
+.wide {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.marquee > * {
+  -webkit-animation: marquee 10s linear infinite both alternate;
+  animation: marquee 10s linear infinite both alternate;
+}
+@-webkit-keyframes marquee {
+  to {
+    transform: translateX(min(100cqw - 100%, 0px));
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(min(100cqw - 100%, 0px));
+  }
 }
 
 #nav {
@@ -258,8 +298,7 @@ input[type=text] {
 }
 
 thead {
-  background: rgb(15,29,47);
-  background: linear-gradient(0deg, rgba(15,29,47,1) 0%, rgba(15,29,47,1) 50%, rgba(7,14,23,1) 100%);
+  background: #0F1D2F linear-gradient(0deg, rgba(15, 29, 47, 1) 0%, rgba(15, 29, 47, 1) 50%, rgba(7, 14, 23, 1) 100%);
 }
 
 th {
@@ -295,7 +334,7 @@ tbody td.actions {
 /* make arrow for currently playing song look nice */
 
 #queue table tr.playing td:first-of-type::before {
-  content: '\2BC8';  // ⯈
+  content: '\2BC8';  /* ⯈ Black Medium Right-Pointing Triangle Centred */
 }
 
 #queue table tr td:first-of-type {
@@ -310,11 +349,11 @@ tbody td.actions {
 }
 
 table tr:nth-child(odd) td {
-  background: #1e1f1a;
+  background-color: #1e1f1a;
 }
 
 table tr:nth-child(even) td {
-  background: #171812;
+  background-color: #171812;
 }
 
 #queue table tr:nth-child(odd).playing td,
@@ -323,7 +362,7 @@ table tr:nth-child(even) td {
 }
 
 table tr:hover td {
-  background-color: #354158 !important; /* TODO: remove !important */
+  background-color: #354158;
 }
 
 #tabs {
@@ -335,9 +374,9 @@ table tr:hover td {
   padding: 3pt;
   display: inline-block;
   text-align: center;
-  background-color: #28374a;
+  background-color: var(--input-background-color);
   color: var(--text-color);
-  border: 1px solid #545454;
+  border: 1px solid var(--input-border-light);
   border-top-left-radius: 5pt;
   border-top-right-radius: 5pt;
 }
@@ -346,10 +385,6 @@ table tr:hover td {
   background-color: #1a1a1a;
   color: var(--text-color);
   border-bottom: none;
-  /*border-top-color: #1a1a1a;*/
-  /*border-right-color: #545454;*/
-  /*border-bottom-color: #545454;*/
-  /*border-left-color: #1a1a1a;*/
 }
 
 #browser {
@@ -360,11 +395,11 @@ table tr:hover td {
 #control-playlist-list {
   font-size: 12pt;
   width: 100%;
-  background-color: #28374a;
+  background-color: var(--input-background-color);
   color: var(--text-color);
   border: 1px solid black;
-  border-right-color: #545454;
-  border-bottom-color: #545454;
+  border-right-color: var(--input-border-light);
+  border-bottom-color: var(--input-border-light);
   scrollbar-color: #490b00 #09101d;  /* only in firefox: https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color */
 }
 
@@ -372,4 +407,22 @@ footer svg {
   color: var(--text-color);
   width: 12pt;
   height: 12pt;
+}
+
+/*dialog {*/
+/*  position: fixed;*/
+/*  left: 50%;*/
+/*  top: 50%;*/
+/*  transform: translate(-50%, -50%);*/
+/*}*/
+
+dialog {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+dialog .close {
+  position: absolute;
+  top: 1pt;
+  right: 1pt;
 }
