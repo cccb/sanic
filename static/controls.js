@@ -69,6 +69,7 @@ control_update_db.addEventListener("click", e => {
     if (r.status === 200) {
       const job_id = await r.text();
       console.log(`Update started (Job ID: ${job_id})`)
+      e.target.disabled = true;
     } else {
       console.error(`API returned ${r.status}: ${r.statusText}`)
     }
@@ -94,18 +95,22 @@ control_progress.addEventListener("change", e => {
   fetch(`${API_URL}/seek/${e.target.value}`)
 });
 control_repeat.addEventListener("click", e => {
-  if (e.target.innerHTML === "&#x1F534; repeat") {  // TODO: check is never true
+  if (e.target.dataset.state === "on") {  // TODO: check is never true
     e.target.innerHTML = "&#x1F518; repeat";
+    e.target.dataset.state = "off";
   } else {
     e.target.innerHTML = "&#x1F534; repeat";
+    e.target.dataset.state = "on";
   }
   fetch(`${API_URL}/repeat`);
 });
 control_shuffle.addEventListener("click", e => {
-  if (e.target.innerHTML === "&#x1F534; shuffle") {  // TODO: check is never true
+  if (e.target.dataset.state === "on") {  // TODO: check is never true
     e.target.innerHTML = "&#x1F518; shuffle";
+    e.target.dataset.state = "off";
   } else {
     e.target.innerHTML = "&#x1F534; shuffle";
+    e.target.dataset.state = "on";
   }
   fetch(`${API_URL}/random`);
 });
@@ -194,8 +199,10 @@ socket.addEventListener("message", (e) => {
       if ("repeat" in msg.mpd_status) {
         if (msg.mpd_status.repeat === "1") {
           control_repeat.innerHTML = "&#x1F534; repeat"; // 🔴 Red Circle
+          control_repeat.dataset.state = "on";
         } else {
           control_repeat.innerHTML = "&#x1F518; repeat"; // 🔘 Radio Button
+          control_repeat.dataset.state = "off";
         }
       }
 
@@ -203,8 +210,10 @@ socket.addEventListener("message", (e) => {
       if ("random" in msg.mpd_status) {
         if (msg.mpd_status.random === "1") {
           control_shuffle.innerHTML = "&#x1F534; shuffle"; // 🔴 Red Circle
+          control_shuffle.dataset.state = "on";
         } else {
           control_shuffle.innerHTML = "&#x1F518; shuffle"; // 🔘 Radio Button
+          control_shuffle.dataset.state = "off";
         }
       }
 
@@ -254,14 +263,39 @@ socket.addEventListener("message", (e) => {
       const duration_seconds = Math.floor(elem.duration - duration_hours * 3600 - duration_minutes * 60);
       length.innerText = `${duration_hours}:${duration_minutes.toString().padStart(2, '0')}:${duration_seconds.toString().padStart(2, '0')}`;
       const actions = document.createElement("td");
-      const del = document.createElement("button");
-      del.innerHTML = "&#x1F5D1;&#xFE0F;";
-      del.addEventListener("click", e => {
+      // TODO: maybe use a instead of button?
+      const moveUp = document.createElement("button");
+      moveUp.classList.add("borderless");
+      moveUp.innerHTML = "&#x1F53A;"; // 🔺 Red Triangle Pointed Down
+      moveUp.addEventListener("click", event => {
+        console.log(`DEBUG: move song ${elem.Pos} up`);
+        // fetch(`${API_URL}/queue_del/${elem.Pos}`).then(r => {
+        //   console.log(r.text());
+        // });
+      });
+      // TODO: maybe use a instead of button?
+      const moveDown = document.createElement("button");
+      moveDown.classList.add("borderless");
+      moveDown.innerHTML = "&#x1F53B;"; // 🔻 Red Triangle Pointed Up
+      moveDown.addEventListener("click", event => {
+        console.log(`DEBUG: move song ${elem.Pos} down`);
+        // fetch(`${API_URL}/queue_del/${elem.Pos}`).then(r => {
+        //   console.log(r.text());
+        // });
+      });
+      // TODO: maybe use a instead of button?
+      const remove = document.createElement("button");
+      remove.classList.add("borderless");
+      remove.innerHTML = "&#x274C;"; // ❌ Cross mark
+      remove.addEventListener("click", event => {
+        console.log(`DEBUG: remove song ${elem.Pos} from queue`);
         fetch(`${API_URL}/queue_del/${elem.Pos}`).then(r => {
           console.log(r.text());
-        })
+        });
       });
-      actions.appendChild(del);
+      actions.appendChild(moveUp);
+      actions.appendChild(moveDown);
+      actions.appendChild(remove);
       tr.appendChild(pos);
       tr.appendChild(artist);
       tr.appendChild(track);

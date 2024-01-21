@@ -11,9 +11,8 @@
   <div id="nav">
     <div id="control-admin">
       <button id="connection-state">&#x274C; Disconnected</button> <!-- ❌ Cross Mark -->
-      <button>Login</button>
       <button>Config</button>
-      <button id="control-update-db" disabled="disabled">Update DB</button>
+      <button id="control-update-db" disabled="disabled"><span class="loader"></span> Update DB</button>
     </div><!--/#control-admin-->
     <div>
       <div class="spaced">
@@ -22,15 +21,15 @@
         <button id="control-play-pause">&#x23F5;&#xFE0E;</button> <!-- ▶️ Play or ⏸️ Pause Button -->
         <button id="control-next">&#x23ED;&#xFE0E;</button> <!-- ⏭️ Next Track Button -->
       </div><!--/.spaced-->
-      <div>
+      <div class="spaced">
         <label for="control-progress"></label>
         <input type="range" id="control-progress" name="progress" min="0" step="1" />
       </div>
     </div>
     <div>
       <div class="spaced">
-        <button id="control-repeat">&#x1F518; repeat</button> <!-- 🔘 Radio Button -->
-        <button id="control-shuffle">&#x1F518; shuffle</button> <!-- 🔘 Radio Button -->
+        <button id="control-repeat" data-state="off">&#x1F518; repeat</button> <!-- 🔘 Radio Button -->
+        <button id="control-shuffle" data-state="off">&#x1F518; shuffle</button> <!-- 🔘 Radio Button -->
       </div><!--/.spaced-->
       <div class="spaced">
         <label for="control-xfade">xfade</label>
@@ -46,10 +45,9 @@
         <button id="control-volume-up">&#x1F50A;</button> <!-- 🔊 Speaker with sound waves -->
       </div><!--/.spaced-->
     </div>
-    <div>
-      <p>Now playing:</p>
+    <div class="wide">
       <div>
-        <label for="control-track">Track:</label>
+        <label for="control-track">Now playing:</label>
         <input type="text" id="control-track" name="track" disabled="disabled" />
       </div>
       <div>

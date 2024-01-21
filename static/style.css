@@ -1,5 +1,9 @@
 :root {
   --ribbon-width: 160px;
+  --ribbon-height: 80px;
+
+  --background-color: #041936;
+  --text-color: #bbb;
 }
 
 /* #################### */
@@ -16,7 +20,7 @@ main {
   display: grid;
   grid-auto-columns: 1fr;
   grid-template-columns: 1fr 2fr;
-  grid-template-rows: 100px 1fr 1fr;
+  grid-template-rows: var(--ribbon-height) 1fr 1fr;
   gap: 0 0;
   grid-template-areas: "nav nav" "queue queue" "browser result" "footer footer";
 }
@@ -31,6 +35,10 @@ main {
   display: flex;
 }
 
+#nav > div {
+  width: var(--ribbon-width);
+}
+
 #result {
   grid-area: result;
   overflow: auto;
@@ -43,7 +51,7 @@ main {
 main footer {
   grid-area: footer;
   overflow: auto;
-  background-color: #041936;
+  background-color: var(--background-color);
   text-align: right;
 }
 
@@ -83,6 +91,23 @@ table {
 /* #################### */
 /* ### pretty stuff ### */
 /* #################### */
+
+#control-progress {
+  width: var(--ribbon-width);
+}
+
+#control-volume {
+  width: 80px;
+}
+
+#nav > div.wide {
+  width: 280px;
+}
+
+#nav > div.wide div {
+  display: flex;
+  justify-content: space-between;
+}
 
 /* Disable arrows in input */
 
@@ -155,7 +180,7 @@ table {
 
 html, body {
   background-color: #09101d;
-  color: #bbb;
+  color: var(--text-color);
   scrollbar-color: #490b00 #09101d;  /* only in firefox: https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color */
   font-weight: normal;
   font-family: Arial, Helvetica, sans-serif;
@@ -163,17 +188,49 @@ html, body {
 }
 
 a {
-  color: #bbb;
+  color: var(--text-color);
   text-decoration: none;
 }
 
 button {
   background-color: #28374a;
-  color: #bbb;
+  color: var(--text-color);
   border-top-color: #545454;
   border-right-color: #3a3a3a;
   border-bottom-color: #3a3a3a;
   border-left-color: #545454;
+}
+
+button[disabled] {
+  color: var(--background-color);
+}
+
+button[disabled] .loader {
+  display: inline-block;
+}
+
+button .loader {
+  display: none;
+}
+
+.loader {
+  width: 10pt;
+  height: 10pt;
+  border: 3px solid var(--text-color);
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* borderless button used in queue */
@@ -185,7 +242,7 @@ button {
 
 input[type=text] {
   background-color: #28374a;
-  color: white;
+  color: var(--text-color);
   border: 1px solid black;
   border-right-color: #545454;
   border-bottom-color: #545454;
@@ -279,7 +336,7 @@ table tr:hover td {
   display: inline-block;
   text-align: center;
   background-color: #28374a;
-  color: #bbb;
+  color: var(--text-color);
   border: 1px solid #545454;
   border-top-left-radius: 5pt;
   border-top-right-radius: 5pt;
@@ -287,7 +344,7 @@ table tr:hover td {
 
 #tabs a.active {
   background-color: #1a1a1a;
-  color: #bbb;
+  color: var(--text-color);
   border-bottom: none;
   /*border-top-color: #1a1a1a;*/
   /*border-right-color: #545454;*/
@@ -304,7 +361,7 @@ table tr:hover td {
   font-size: 12pt;
   width: 100%;
   background-color: #28374a;
-  color: white;
+  color: var(--text-color);
   border: 1px solid black;
   border-right-color: #545454;
   border-bottom-color: #545454;
@@ -312,7 +369,7 @@ table tr:hover td {
 }
 
 footer svg {
-  color: white;
+  color: var(--text-color);
   width: 12pt;
   height: 12pt;
 }
