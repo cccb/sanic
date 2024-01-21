@@ -1,4 +1,4 @@
-[![maintained](https://img.shields.io/maintenance/yes/2023)]()
+[![maintained](https://img.shields.io/maintenance/yes/2024)]()
 
 # sanic
 
