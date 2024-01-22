@@ -1,26 +1,38 @@
-mpd:
-	mkdir -p /tmp/sanic/{music,playlists}
-	touch /tmp/sanic/mpd_db
+PROJECT := sanic
+
+.DEFAULT_GOAL := help
+
+.PHONY: mpd run build tidy verify test cert container help
+
+mpd:  ## Run mpd test instance
+	mkdir -p /tmp/${PROJECT}/{music,playlists}
+	touch /tmp/${PROJECT}/mpd_db
 	mpd --no-daemon ./mpd.conf
 
-run: build
+run: build  ## Run project
 	./server
 
-build:
-	go build -v -o sanic
+build:  ## Compile project
+	go build -v -o ${PROJECT}
 
-tidy:  ## add missing and remove unused modules
+tidy:  ## Add missing and remove unused modules
 	go mod tidy
 
-verify:  ## verify dependencies have expected content
+verify:  ## Verify dependencies have expected content
 	go mod verify
 
-test:  ## run tests
+test:  ## Run tests
 	go test ./...
 
-cert:  ## create https certificate for testing
-	go run $GOROOT/src/crypto/tls/generate_cert.go --host localhost
+cert:  ## Create https certificate for local testing
+	go run $$GOROOT/src/crypto/tls/generate_cert.go --host localhost
 
-container:
-	podman build -t dotfiles:latest .
+build-container:  ## Build container image
+	podman build --tag ${PROJECT}:latest .
+
+run-container: build-container  ## Run container image
+	podman run --rm --volume ./config.ini:/config.ini --publish-all ${PROJECT}:latest
+
+help: ## Display this help
+	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
