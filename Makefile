@@ -10,7 +10,7 @@ mpd:  ## Run mpd test instance
 	mpd --no-daemon ./mpd.conf
 
 run: build  ## Run project
-	./server
+	./${PROJECT}
 
 build:  ## Compile project
 	go build -v -o ${PROJECT}
