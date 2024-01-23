@@ -15,6 +15,9 @@ run: build  ## Run project
 build:  ## Compile project
 	go build -v -o ${PROJECT}
 
+update:  ## Update go dependencies
+	go get -u
+
 tidy:  ## Add missing and remove unused modules
 	go mod tidy
 

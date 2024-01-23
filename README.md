@@ -20,6 +20,14 @@ sanic is developed using [Nix][nix], but you can also just use the usual Golang 
 
 Run local [MPD][mpd] instance for testing with `make mpd`.
 
+Update go depdendencies like this:
+
+```shell
+go get -u  # or `make update`
+go mod tidy  # or `make tidy`
+gomod2nix
+```
+
 ### ❄️ w/ Nix
 
 Enter development shell (also has [mpc][mpc] client installed for testing):
