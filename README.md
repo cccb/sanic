@@ -18,17 +18,57 @@ chaos music control inspired by [relaxx player][relaxx]
 
 ### NixOS (flakes)
 
+Example flake setup (untested):
+
+```nix
+{
+  description = "my host";
+  inputs ={
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.11";
+    sanic.url = "git.berlin.ccc.de:cccb/sanic/latest";
+  };
+  outputs = { self, nixpkgs, sanic }:
+  let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs { inherit system; };
+  in
+  {
+    nixosConfigurations."myhostname".nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = [
+        sanic.nixosModules.sanic
+        {
+          sanic = {
+            mpd = {
+              host = "localhost";
+              port = 6600;
+            };
+            ui = {
+              hostname = "[::]";
+              port = "443";
+              tls = true;
+            };
+          };
+        }
+      ];
+    };
+  };
+}
+```
+
+### Arch Linux (Manjaro, etc)
+
+Install from the AUR:
+
+```
+yay -S sanic
+```
+
+### Debian (Ubuntu, Mint, etc)
+
 _tba_
 
-### Arch Linux
-
-_tba_
-
-### Debian
-
-_tba_
-
-### Red Hat
+### Red Hat (Fedora, Rocky Linux, etc)
 
 _tba_
 
