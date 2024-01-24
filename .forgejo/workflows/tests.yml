@@ -2,8 +2,7 @@ name: Run tests
 
 on:
   push:
-    branches:
-      - next
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -20,6 +19,11 @@ jobs:
           #go-version: "stable"
           go-version-file: "go.mod"
           check-latest: true
+      - name: Run Linter
+        uses: dominikh/staticcheck-action@v1.3.0
+        with:
+          version: "latest"
+          install-go: false
       - name: Run tests
         run: make test
 
