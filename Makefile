@@ -24,6 +24,9 @@ tidy:  ## Add missing and remove unused modules
 verify:  ## Verify dependencies have expected content
 	go mod verify
 
+format:  ## Format go code
+	go fmt ./...
+
 test:  ## Run tests
 	go test ./...
 
