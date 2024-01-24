@@ -14,6 +14,28 @@ chaos music control inspired by [relaxx player][relaxx]
 - add playlists from internet radios (`*.m3u`, `*.pls`)
 - add music from other sources like youtube (`youtube-dl`)
 
+## Installation
+
+### NixOS (flakes)
+
+_tba_
+
+### Arch Linux
+
+_tba_
+
+### Debian
+
+_tba_
+
+### Red Hat
+
+_tba_
+
+### Windows / macOS
+
+lol! 🤣
+
 ## 🛠️ Development
 
 sanic is developed using [Nix][nix], but you can also just use the usual Golang tooling.
