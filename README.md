@@ -50,6 +50,8 @@ Use these Make targets for convenience:
 - `build`: Compile project
 - `tidy`: Add missing and remove unused modules
 - `verify`: Verify dependencies have expected content
+- `format`: Format go code
+- `lint`: Run linter (staticcheck)
 - `test`: Run tests
 - `cert`: Create https certificate for local testing
 

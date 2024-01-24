@@ -26,6 +26,7 @@
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           go
+          go-tools  # staticcheck
           gomod2nix.packages.${system}.default
           sanic
         ];

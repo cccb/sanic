@@ -27,6 +27,9 @@ verify:  ## Verify dependencies have expected content
 format:  ## Format go code
 	go fmt ./...
 
+lint:  ## Run linter (staticcheck)
+	staticcheck -f stylish ./...
+
 test:  ## Run tests
 	go test ./...
 
