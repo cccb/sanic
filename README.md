@@ -1,4 +1,6 @@
-[![maintained](https://img.shields.io/maintenance/yes/2024)]()
+[![maintained](https://img.shields.io/maintenance/yes/2024?style=flat-square)]()
+![Gitea Release](https://img.shields.io/gitea/v/release/cccb/sanic?gitea_url=https%3A%2F%2Fgit.berlin.ccc.de&sort=semver&display_name=release&style=flat-square)
+
 
 # 🦔 sanic
 
