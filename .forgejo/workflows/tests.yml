@@ -6,6 +6,21 @@ on:
   workflow_dispatch:
 
 jobs:
+  nix:
+    runs-on: docker
+    container:
+      image: nix
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Nix doctor
+        run: nix doctor
+      - name: Check flake
+        run: nix flake check --all-systems
+      - name: Build flake
+        run: nix build --print-out-paths
+      - name: Flake info
+        run: nix flake info
   tests:
     runs-on: docker
     container:

@@ -21,12 +21,14 @@
         src = ./.;
         modules = ./gomod2nix.toml;
       };
-    in {
-      defaultPackage = sanic;
+    in
+    {
+      packages.default = sanic;
+      formatter = pkgs.nixpkgs-fmt;
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           go
-          go-tools  # staticcheck
+          go-tools # staticcheck
           gomod2nix.packages.${system}.default
           sanic
         ];
