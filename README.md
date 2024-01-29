@@ -24,10 +24,12 @@ Example flake setup (untested):
 
 ```nix
 {
-  description = "my host";
-  inputs ={
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.11";
-    sanic.url = "git.berlin.ccc.de:cccb/sanic/latest";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    sanic = {
+      url = "git+https://git.berlin.ccc.de/cccb/sanic?ref=main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = { self, nixpkgs, sanic }:
   let
@@ -35,23 +37,9 @@ Example flake setup (untested):
     pkgs = import nixpkgs { inherit system; };
   in
   {
-    nixosConfigurations."myhostname".nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        sanic.nixosModules.sanic
-        {
-          sanic = {
-            mpd = {
-              host = "localhost";
-              port = 6600;
-            };
-            ui = {
-              hostname = "[::]";
-              port = "443";
-              tls = true;
-            };
-          };
-        }
+    devShell.${system} = pkgs.mkShell {
+      packages = [
+        sanic.packages.${system}.default
       ];
     };
   };
