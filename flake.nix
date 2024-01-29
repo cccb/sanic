@@ -22,7 +22,7 @@
         modules = ./gomod2nix.toml;
       };
     in {
-      defaultPackage = sanic;
+      packages.default = sanic;
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           go
@@ -38,3 +38,4 @@
     }
   );
 }
+
