@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Sanic</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="treeview.css">
   <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48 64x64" type="image/png" />
 </head>
 <body>
@@ -99,7 +100,55 @@
     </div><!--/#tabs-->
     <div id="file-browser">
       <div>
-        file browser
+        <ul class="tree">
+          <li>
+            <details open>
+              <summary>/</summary>
+              <ul>
+                <li>
+                  <details>
+                    <summary>00_music</summary>
+                    <ul>
+                      <li>autosort</li>
+                      <li>reimport</li>
+                      <li>unsortable</li>
+                      <li>youtube</li>
+                    </ul>
+                  </details>
+                </li>
+                <li>
+                  <details>
+                    <summary>01_incoming</summary>
+                    <ul>
+                      <li>coon</li>
+                      <li>cascha</li>
+                      <li>XenGi</li>
+                    </ul>
+                  </details>
+                </li>
+                <li>
+                  <details>
+                    <summary>02_megablast</summary>
+                    <ul>
+                      <li>dnb</li>
+                      <li>mix</li>
+                    </ul>
+                  </details>
+                </li>
+                <li>
+                  <details>
+                    <summary>03_mfs</summary>
+                    <ul>
+                      <li>ambient</li>
+                      <li>electronic</li>
+                    </ul>
+                  </details>
+                </li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
       </div>
       <div>
         actions
