@@ -1,100 +1,150 @@
-/* https://iamkate.com/code/tree-views/ */
+/* https://codepen.io/defims/pen/DBaVXM */
 
-/* Custom properties */
-
-.tree {
-  --spacing : 1.0rem;
-  --radius  : 10px;
+ul {
+  float: left;
+  clear: left;
+  margin-left: .25em;
+  padding: 0;
 }
 
-/* Padding */
-
-.tree li {
-  display      : block;
-  position     : relative;
-  padding-left : calc(2 * var(--spacing) - var(--radius) - 2px + 10px);
-}
-
-.tree ul {
-  margin-left  : calc(var(--radius) - var(--spacing));
-  padding-left : 0;
-}
-
-/* Vertical lines */
-
-.tree ul li {
-  border-left : 2px solid #ddd;
-}
-
-.tree ul li:last-child {
-  border-color : transparent;
-}
-
-/* Horizontal lines */
-
-.tree ul::before {
-  content      : '';
-  display      : block;
-  position     : absolute;
-  top          : calc(var(--spacing) - 8px);
-  left         : 6px;
-  width        : calc(var(--spacing) + 2px);
-  border       : solid #ddd;
-  border-width : 0 0 2px 2px;
-}
-
-.tree ul li::before {
-  content      : '';
-  display      : block;
-  position     : absolute;
-  top          : calc(var(--spacing) - 22px);
-  left         : -2px;
-  width        : calc(var(--spacing) + 2px);
-  height       : calc(var(--spacing) - 2px);
-  border       : solid #ddd;
-  border-width : 0 0 2px 2px;
-}
-
-/* Summaries */
-
-.tree summary {
-  display : block;
-  cursor  : pointer;
-}
-
-.tree summary::marker,
-.tree summary::-webkit-details-marker {
-  display : none;
-}
-
-.tree summary:focus {
-  outline : none;
-}
-
-.tree summary:focus-visible {
-  outline : 1px dotted #000;
-}
-
-/* Markers */
-
-.tree li::after,
-.tree summary::before {
-  content       : '\1F4C1';
-  display       : block;
-  position      : absolute;
-  top           : calc(var(--spacing) / 1.5 - var(--radius));
-  left          : calc(var(--spacing) - var(--radius) - 1px);
-  width         : calc(2 * var(--radius));
-  height        : calc(2 * var(--radius));
-}u
-
-/* Expand and collapse buttons */
-
-.tree summary::before {
+ul:before {
+  content:"";
+  position: absolute;
   z-index: 1;
-  content: '\1F4C1';
+  top:.25em;
+  right:auto;
+  bottom:0;
+  left: 1.75em;
+  margin: auto;
+  /* border-right: dotted white .1em; */
+  width: 0;
+  height: auto;
 }
 
-.tree details[open] > summary::before {
+ul:after {
+  content: "-";
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: -.5em;
+  margin-left: .65em;
+  margin-top: .15em;
+  padding: 0;
+  width: .8em;
+  height: .8em;
+  text-align: center;
+  line-height: .7em;
+  font-size: 1em;
+}
+
+ul > li {
+  display: block;
+  position: relative;
+  float: left;
+  clear: both;
+  right:auto;
+  padding-left: 1em;
+  width:auto;
+  text-align: center;
+  color:white;
+}
+
+ul > li > input[type=checkbox] {
+  display:block;
+  position: absolute;
+  float: left;
+  z-index: 4;
+  margin: 0 0 0 -1em;
+  padding: 0;
+  width:1em;
+  height: 2em;
+  font-size: 1em;
+  opacity: 0;
+  cursor: pointer;
+}
+
+ul > li > input[type=checkbox]:not(:checked)~ul:before {
+  display: none;
+}
+
+ul > li > input[type=checkbox]:not(:checked)~ul:after {
+  content: "+"
+}
+
+ul > li > input[type=checkbox]:not(:checked)~ul * {
+  display: none;
+}
+
+ul > li > span {
+  display: block;
+  position: relative;
+  float: left;
+  z-index: 3;
+  margin-left: .25em;
+  padding-left: .25em;
+}
+
+ul > li > span:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left:-1em;
+  top:0;
+  bottom:0;
+  margin: auto .25em auto .25em;
+  /* border-top: dotted white .1em; */
+  width: .75em;
+  height: 0;
+}
+
+ul > li:last-child:before {
+  content: ""; display: block; position: absolute; z-index: 2;
+  top:1em; left:0; bottom:-.25em;
+  width:.75em; height:auto;
+}
+
+#tree {
+  position: relative; font-family: "Georgia";
+}
+
+#tree:before {
+  left:.5em;
+}
+
+#tree:after {
+  display: none;
+}
+
+/* decoration */
+ul, ul > li:last-child:before {
+  background: transparent;
+}
+
+ul > li {
+  background: transparent;
+}
+
+ul:after {
+  background: linear-gradient(135deg, rgba(255,255,255,1), rgba(195,186,170,1));
+  color: black;
+  border:solid gray 1px;
+  border-radius: .1em;
+}
+
+ul > li > span {
+  border-radius: .25em;
+  color: white;
+}
+
+ul > li > input[type=checkbox]~span:before {
+  content:""; display: inline-block;
+  margin: 0 .25em  0 0;
+  width:1em; height: 1em; ;line-height: 1em;
+  content: '\1F4C1';
+  background-repeat:no-repeat;
+  background-size:contain;
+}
+
+ul > li > input[type=checkbox]:checked~span:before {
   content: '\1F4C2';
 }
