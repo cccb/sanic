@@ -14,7 +14,7 @@
     - [x] `Pause` button
   - [x] Track seeker
   - [x] `Repeat` toggle
-  - [ ] `Shuffle` toggle
+  - [x] `Shuffle` toggle
   - [ ] xfade
     - [ ] decrease
     - [ ] increase
@@ -55,10 +55,10 @@
 ## backend
 
 - Websocket
-  - [ ] `#status` requests mpd infos:
+  - [x] `#status` requests mpd infos:
     - `status` 
     - `currentsong`
-    - `playlistinfo`
+    - `playlistinfo` (queue)
   - [ ] `#download` requests download of URL (`yt-dlp`)
     - *TBA*
 - API endpoints
@@ -67,10 +67,10 @@
   - [x] `/api/next_track`
   - [x] `/api/stop`
   - [x] `/api/play`
-  - [ ] `/api/pause`
+  - [x] `/api/pause`
   - [x] `/api/seek/:seconds`
-  - [ ] `/api/repeat`
-  - [ ] `/api/random`
+  - [x] `/api/repeat`
+  - [x] `/api/random`
   - [x] `/api/volume/:level`
   - [ ] `/api/xfade/:seconds`
   - [ ] `/api/queue_clear`
@@ -81,12 +81,3 @@
   - [ ] `/api/list_playlists`
   - [ ] `/api/save_playlist`
   - [ ] `/api/delete_playlist`
-
-
-# foo
-
-- client: connect websocket
-- server: on_connect: send full state
-- server: subscribe to changes
-- server: on_change: send to client
-

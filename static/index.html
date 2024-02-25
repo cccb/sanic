@@ -233,6 +233,7 @@ for (let i = 1; i <= 100; i++) {
   const tr = document.createElement("tr");
   if (i === 1) {
     tr.classList.add("playing");
+    tr.dataset.song_id = i;
   }
   const pos = document.createElement("td");
   pos.innerText = i.toString();

@@ -138,7 +138,7 @@ control_previous.addEventListener("click", e => {
   });
 });
 control_play_pause.addEventListener("click", e => {
-  if (e.target.innerHTML === "⏸︎") {  // pause  // TODO: check is never true
+  if (e.target.innerHTML === "⏸︎") {
     fetch(`${API_URL}/pause`).then(async r => {
       if (r.status >= 400) {
         console.error(`API returned ${r.status}: ${r.statusText}`);
@@ -279,10 +279,10 @@ socket.addEventListener("message", (e) => {
       }
 
       // update play/pause button
-      if ("state" in msg.mpd_status && msg.mpd_status.state === "play") {
-        control_play_pause.innerHTML = "&#x23F8;&#xFE0E;";  // Pause
-      } else {
+      if ("state" in msg.mpd_status && msg.mpd_status.state !== "play") {  // TODO: only update DOM if necessary
         control_play_pause.innerHTML = "&#x23F5;&#xFE0E;";  // Play
+      } else {
+        control_play_pause.innerHTML = "&#x23F8;&#xFE0E;";  // Pause
       }
 
       // update playback time
@@ -354,6 +354,13 @@ socket.addEventListener("message", (e) => {
     const tbody = document.createElement("tbody");
     msg.mpd_queue.forEach(elem => {
       const tr = document.createElement("tr");
+      tr.dataset.song_id = elem.Id;
+      if ("songid" in msg.mpd_status && msg.mpd_status.songid === elem.Id) {
+        tr.classList.add("playing");
+      } else {
+        tr.classList.remove("playing");
+      }
+      // TODO: check if current row is currently playing track
       const pos = document.createElement("td");
       pos.innerText = elem.Pos;
       const artist = document.createElement("td");
