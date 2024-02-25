@@ -124,7 +124,7 @@ func wsServe(c echo.Context) error {
 				c.Logger().Error(err)
 				break
 			} else {
-				log.Println(msg)
+				// log.Print(msg)
 				if strings.ToLower(msg) == "#status" {
 					status, err := mpdConn.Status()
 					if err != nil {

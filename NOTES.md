@@ -7,13 +7,13 @@
   - [ ] Display config dialog (is this even needed?)
   - [x] `Update DB` button
     - [x] Disable if running update is detected
-  - [ ] `Previous Track` button
-  - [ ] `Next Track` button
+  - [x] `Previous Track` button
+  - [x] `Next Track` button
   - [x] `Stop` button
   - [x] `Play` button
-    - [ ] `Pause` button
+    - [x] `Pause` button
   - [x] Track seeker
-  - [ ] `Repeat` toggle
+  - [x] `Repeat` toggle
   - [ ] `Shuffle` toggle
   - [ ] xfade
     - [ ] decrease

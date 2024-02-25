@@ -1,3 +1,5 @@
+// Configuration
+
 const API_URL = `${document.location.protocol}//${document.location.host}/api`;
 const VOLUME_STEP = 5;
 
@@ -130,21 +132,21 @@ control_update_db.addEventListener("click", e => {
 });
 control_previous.addEventListener("click", e => {
   fetch(`${API_URL}/previous_track`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
 control_play_pause.addEventListener("click", e => {
-  if (e.target.innerHTML === "&#x23F5;&#xFE0E;") {  // TODO: check is never true
+  if (e.target.innerHTML === "⏸︎") {  // pause  // TODO: check is never true
     fetch(`${API_URL}/pause`).then(async r => {
-      if (200 >= r.status < 300) {
+      if (r.status >= 400) {
         console.error(`API returned ${r.status}: ${r.statusText}`);
       }
     });
   } else {  // Pause
     fetch(`${API_URL}/play`).then(async r => {
-      if (200 >= r.status < 300) {
+      if (r.status >= 400) {
         console.error(`API returned ${r.status}: ${r.statusText}`);
       }
     });
@@ -152,21 +154,21 @@ control_play_pause.addEventListener("click", e => {
 });
 control_stop.addEventListener("click", e => {
   fetch(`${API_URL}/stop`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
 control_next.addEventListener("click", e => {
   fetch(`${API_URL}/next_track`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
 control_progress.addEventListener("change", e => {
   fetch(`${API_URL}/seek/${e.target.value}`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
@@ -180,7 +182,7 @@ control_repeat.addEventListener("click", e => {
     e.target.dataset.state = "on";
   }
   fetch(`${API_URL}/repeat`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
@@ -194,7 +196,7 @@ control_shuffle.addEventListener("click", e => {
     e.target.dataset.state = "on";
   }
   fetch(`${API_URL}/random`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
@@ -202,7 +204,7 @@ control_shuffle.addEventListener("click", e => {
 control_xfade_minus.addEventListener("click", e => {
   // TODO: not yet implemented
   fetch(`${API_URL}/xfade`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
@@ -210,7 +212,7 @@ control_xfade_minus.addEventListener("click", e => {
 control_xfade_plus.addEventListener("click", e => {
   // TODO: not yet implemented
   fetch(`${API_URL}/xfade`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
@@ -218,7 +220,7 @@ control_xfade_plus.addEventListener("click", e => {
 control_volume_up.addEventListener("click", e => {
   const v = Math.min(parseInt(control_volume.value) + VOLUME_STEP, 100);
   fetch(`${API_URL}/volume/${v}`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
@@ -228,7 +230,7 @@ control_volume_up.addEventListener("click", e => {
 control_volume_down.addEventListener("click", e => {
   const v = Math.max(parseInt(control_volume.value) - VOLUME_STEP, 0);
   fetch(`${API_URL}/volume/${v}`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
@@ -236,7 +238,7 @@ control_volume_down.addEventListener("click", e => {
 });
 control_volume.addEventListener("change", e => {
   fetch(`${API_URL}/volume/${e.target.value}`).then(async r => {
-    if (200 >= r.status < 300) {
+    if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
