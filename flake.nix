@@ -30,7 +30,6 @@
           go
           go-tools # staticcheck
           gomod2nix.packages.${system}.default
-          sanic
         ];
         packages = with pkgs; [
           mpd
