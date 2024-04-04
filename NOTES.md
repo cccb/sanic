@@ -28,15 +28,16 @@
   - [x] `Time`
 - Queue
   - [x] Show queue
-  - [ ] Highlight current track
+  - [x] Highlight current track
   - [ ] Move track up
   - [ ] Move track down
   - [ ] Remove track
   - [ ] `Clear queue` button?
 - File browser
   - [ ] List all directories
-  - [ ] Open folders have different icon (📂 vs 📁)
+  - [ ] The selected folder has a different icon (📂 vs 📁)
   - [ ] Folders with subfolders have a ➕ sign
+  - [ ] Expanded folders have a ➖ sign
   - [ ] Clicked folders contents are displayed in the results
   - [ ] Select tracks in results
   - [ ] `Add` selected tracks to queue button
