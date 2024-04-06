@@ -152,12 +152,12 @@ control_delete_playlist.addEventListener("click", () => {
   });
 });
 
-control_update_db.addEventListener("click", () => {
+control_update_db.addEventListener("click", event => {
   console.log("Issuing database update")
   fetch(`${API_URL}/update_db`).then(async r => {
     if (r.status === 200) {
       console.log(await r.text());
-      e.target.disabled = true;
+      event.target.disabled = true;
     } else {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
@@ -420,32 +420,28 @@ socket.addEventListener("message", event => {
       const length = document.createElement("td");
       length.innerText = secondsToTrackTime(song.duration);
       const actions = document.createElement("td");
+      const moveUp = document.createElement("button");
+      moveUp.classList.add("borderless");
       if (parseInt(song.Pos) !== 0) {
-        const moveUp = document.createElement("button");
-        moveUp.classList.add("borderless");
         moveUp.innerHTML = "&#x1F53A;"; // 🔺 Red Triangle Pointed Down
         moveUp.addEventListener("click", event => { moveTrackInQueue(event, -1) });
-        actions.appendChild(moveUp);
       } else {
-        const spacer = document.createElement("span")
-        spacer.innerHTML = "&emsp;";
-        actions.appendChild(spacer);
+        moveUp.innerHTML = "&emsp;";
       }
+      const moveDown = document.createElement("button");
+      moveDown.classList.add("borderless");
       if (parseInt(song.Pos) !== msg.mpd_queue.length - 1) {
-        const moveDown = document.createElement("button");
-        moveDown.classList.add("borderless");
         moveDown.innerHTML = "&#x1F53B;"; // 🔻 Red Triangle Pointed Up
         moveDown.addEventListener("click", event => {moveTrackInQueue(event, 1)});
-        actions.appendChild(moveDown);
       } else {
-        const spacer = document.createElement("span")
-        spacer.innerHTML = "&emsp;";
-        actions.appendChild(spacer);
+        moveDown.innerHTML = "&emsp;";
       }
       const remove = document.createElement("button");
       remove.classList.add("borderless");
       remove.innerHTML = "&#x274C;"; // ❌ Cross mark
       remove.addEventListener("click", removeTrackFromQueue);
+      actions.appendChild(moveUp);
+      actions.appendChild(moveDown);
       actions.appendChild(remove);
       tr.appendChild(pos);
       tr.appendChild(artist);

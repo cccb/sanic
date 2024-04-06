@@ -35,9 +35,8 @@
   - [ ] `Clear queue` button?
 - File browser
   - [ ] List all directories
-  - [ ] The selected folder has a different icon (📂 vs 📁)
-  - [ ] Folders with subfolders have a ➕ sign
-  - [ ] Expanded folders have a ➖ sign
+  - [ ] Selected folder has different icon (📂 vs 📁)
+  - [ ] Folders with subfolders have a ➕ or ➖ sign
   - [ ] Clicked folders contents are displayed in the results
   - [ ] Select tracks in results
   - [ ] `Add` selected tracks to queue button
@@ -63,22 +62,23 @@
   - [ ] `#download` requests download of URL (`yt-dlp`)
     - *TBA*
 - API endpoints
-  - [x] `/api/update_db`
-  - [x] `/api/previous_track`
-  - [x] `/api/next_track`
-  - [x] `/api/stop`
-  - [x] `/api/play`
-  - [x] `/api/pause`
-  - [x] `/api/seek/:seconds`
-  - [x] `/api/repeat`
-  - [x] `/api/random`
-  - [x] `/api/volume/:level`
+  - [x] GET `/api/update_db`
+  - [x] GET `/api/previous_track`
+  - [x] GET `/api/next_track`
+  - [x] GET `/api/stop`
+  - [x] GET `/api/play`
+  - [x] GET `/api/pause`
+  - [x] GET `/api/seek/:seconds`
+  - [x] GET `/api/repeat`
+  - [x] GET `/api/random`
+  - [x] GET `/api/volume/:level`
   - [ ] `/api/xfade/:seconds`
   - [ ] `/api/queue_clear`
-  - [ ] `/api/queue_add/:songid`
-  - [ ] `/api/queue_del/:songid`
-  - [ ] `/api/queue_move/:songid/:pos`
+  - [ ] POST `/api/queue` `{"song_id": 123}`
+  - [x] GET `/api/queue/:song_id/delete`
+  - [x] GET `/api/queue/:song_id/move/:position`
   - [ ] `/api/list_database/:path`
   - [ ] `/api/list_playlists`
   - [ ] `/api/save_playlist`
   - [ ] `/api/delete_playlist`
+
