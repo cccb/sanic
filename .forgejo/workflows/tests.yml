@@ -35,10 +35,9 @@ jobs:
           go-version-file: "go.mod"
           check-latest: true
       - name: Run Linter
-        uses: dominikh/staticcheck-action@v1.3.0
+        uses: dominikh/staticcheck-action@v1
         with:
           version: "latest"
           install-go: false
       - name: Run tests
         run: make test
-

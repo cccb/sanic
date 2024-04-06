@@ -24,10 +24,11 @@ Example flake setup (untested):
 
 ```nix
 {
+  description = "Example Flake to install sanic on your host";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     sanic = {
-      url = "git+https://git.berlin.ccc.de/cccb/sanic?ref=main";
+      url = "git.berlin.ccc.de/cccb/sanic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -37,34 +38,23 @@ Example flake setup (untested):
     pkgs = import nixpkgs { inherit system; };
   in
   {
-    devShell.${system} = pkgs.mkShell {
-      packages = [
-        sanic.packages.${system}.default
+    nixosConfigurations."myhostname".nixpkgs.lib.nixosSystem = {
+      inherit system;
+      modules = [
+        { environment.systemPackages = [ sanic.packages.${system}.default ]; }
       ];
     };
   };
 }
 ```
 
-### Arch Linux (Manjaro, etc)
+### Arch Linux
 
 Install from the AUR:
 
 ```
 yay -S sanic
 ```
-
-### Debian (Ubuntu, Mint, etc)
-
-_tba_
-
-### Red Hat (Fedora, Rocky Linux, etc)
-
-_tba_
-
-### Windows / macOS
-
-lol! 🤣
 
 ## 🛠️ Development
 
@@ -77,7 +67,7 @@ Update go depdendencies like this:
 ```shell
 go get -u  # or `make update`
 go mod tidy  # or `make tidy`
-gomod2nix
+gomod2nix  # sync go deps with nix
 ```
 
 ### ❄️ w/ Nix
@@ -88,7 +78,7 @@ Enter development shell (also has [mpc][mpc] client installed for testing):
 nix develop
 ```
 
-Build nix flake:
+Build sanic:
 
 ```shell
 nix build

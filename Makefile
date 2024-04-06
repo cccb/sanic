@@ -17,6 +17,7 @@ build:  ## Compile project
 
 update:  ## Update go dependencies
 	go get -u
+	which gomod2nix && gomod2nix
 
 tidy:  ## Add missing and remove unused modules
 	go mod tidy

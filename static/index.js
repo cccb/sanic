@@ -38,7 +38,84 @@ const control_attach_playlist = document.getElementById("control-attach-playlist
 const control_save_playlist = document.getElementById("control-save-playlist");
 const control_delete_playlist = document.getElementById("control-delete-playlist");
 
+// Utility functions
+
+secondsToTrackTime = (t) => {
+  const hours = Math.floor(t / 3600);
+  const minutes = Math.floor((t - hours * 3600) / 60);
+  const seconds = Math.floor(t - hours * 3600 - minutes * 60);
+
+  return `${hours}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
+
+removeTrackFromQueue = (event) => {
+  const song_id = event.target.parentElement.parentElement.dataset.song_id;
+
+  console.log(`DEBUG: remove song id ${song_id} from queue`);
+  fetch(`${API_URL}/queue/${song_id}/delete`).then(r => {
+    console.log(r.text());
+  });
+}
+
+moveTrackInQueue = (event, direction) => {
+  const song_id = event.target.parentElement.parentElement.dataset.song_id;
+  // TODO: figure out position in queue by counting HTML elements?
+  const position = parseInt(event.target.parentElement.parentElement.firstChild.innerText);
+
+  console.log(`DEBUG: move song ${song_id} down in queue to position ${position + direction}`);
+  fetch(`${API_URL}/queue/${song_id}/move/${position + direction}`).then(r => {
+    console.log(r.text());
+  });
+}
+
 // UI controls
+
+tab_browser.addEventListener("click", () => {
+  if (!tab_browser.classList.contains("active")) {
+    tab_browser.classList.add("active");
+    tab_search.classList.remove("active")
+    tab_playlists.classList.remove("active")
+    document.getElementById("file-browser").style.display = "block";
+    document.getElementById("search").style.display = "none";
+    document.getElementById("playlist-browser").style.display = "none";
+  }
+});
+
+tab_search.addEventListener("click", () => {
+  if (!tab_search.classList.contains("active")) {
+    tab_browser.classList.remove("active");
+    tab_search.classList.add("active")
+    tab_playlists.classList.remove("active")
+    document.getElementById("file-browser").style.display = "none";
+    document.getElementById("search").style.display = "block";
+    document.getElementById("playlist-browser").style.display = "none";
+  }
+});
+
+tab_playlists.addEventListener("click", () => {
+  if (!tab_playlists.classList.contains("active")) {
+    tab_browser.classList.remove("active");
+    tab_search.classList.remove("active")
+    tab_playlists.classList.add("active")
+    document.getElementById("file-browser").style.display = "none";
+    document.getElementById("search").style.display = "none";
+    document.getElementById("playlist-browser").style.display = "block";
+  }
+});
+
+control_save_playlist.addEventListener("click", () => {
+  dialog_save_playlist.showModal()
+});
+
+dialog_save_playlist_close.addEventListener("click", () => {
+  dialog_save_playlist.close()
+});
+
+// control_progress.addEventListener("change", event => {
+//   control_time.value = `${secondsToTrackTime(event.target.value)}/${secondsToTrackTime(event.target.max)}`;
+// });
+
+// Add API calls to controls
 
 control_replace_playlist.addEventListener("click", e => {
   fetch(`${API_URL}/`).then(async r => {
@@ -56,15 +133,7 @@ control_attach_playlist.addEventListener("click", e => {
   });
 });
 
-control_save_playlist.addEventListener("click", e => {
-  dialog_save_playlist.showModal()
-});
-
-dialog_save_playlist_close.addEventListener("click", e => {
-  dialog_save_playlist.close()
-});
-
-dialog_save_playlist_submit.addEventListener("click", e => {
+dialog_save_playlist_submit.addEventListener("click", () => {
   fetch(`${API_URL}/playlists`, {method: "PUT"}).then(async r => {
     if (r.status === 201) {
       console.log(`Playlist "${control_playlist_name.value}" saved`)
@@ -72,7 +141,7 @@ dialog_save_playlist_submit.addEventListener("click", e => {
   });
 });
 
-control_delete_playlist.addEventListener("click", e => {
+control_delete_playlist.addEventListener("click", () => {
   const playlist_id = control_playlist_list.value;
   fetch(`${API_URL}/playlists/${playlist_id}`, {method: "DELETE"}).then(r => {
     if (r.status === 204) {
@@ -83,68 +152,34 @@ control_delete_playlist.addEventListener("click", e => {
   });
 });
 
-tab_browser.addEventListener("click", e => {
-  if (!tab_browser.classList.contains("active")) {
-    tab_browser.classList.add("active");
-    tab_search.classList.remove("active")
-    tab_playlists.classList.remove("active")
-    document.getElementById("file-browser").style.display = "block";
-    document.getElementById("search").style.display = "none";
-    document.getElementById("playlist-browser").style.display = "none";
-  }
-});
-
-tab_search.addEventListener("click", e => {
-  if (!tab_search.classList.contains("active")) {
-    tab_browser.classList.remove("active");
-    tab_search.classList.add("active")
-    tab_playlists.classList.remove("active")
-    document.getElementById("file-browser").style.display = "none";
-    document.getElementById("search").style.display = "block";
-    document.getElementById("playlist-browser").style.display = "none";
-  }
-});
-
-tab_playlists.addEventListener("click", e => {
-  if (!tab_playlists.classList.contains("active")) {
-    tab_browser.classList.remove("active");
-    tab_search.classList.remove("active")
-    tab_playlists.classList.add("active")
-    document.getElementById("file-browser").style.display = "none";
-    document.getElementById("search").style.display = "none";
-    document.getElementById("playlist-browser").style.display = "block";
-  }
-});
-
-// Add API calls to controls
-
-control_update_db.addEventListener("click", e => {
+control_update_db.addEventListener("click", () => {
   console.log("Issuing database update")
   fetch(`${API_URL}/update_db`).then(async r => {
     if (r.status === 200) {
-      const job_id = await r.text();
-      console.log(`Update started (Job ID: ${job_id})`);
+      console.log(await r.text());
       e.target.disabled = true;
     } else {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
-control_previous.addEventListener("click", e => {
+
+control_previous.addEventListener("click", () => {
   fetch(`${API_URL}/previous_track`).then(async r => {
     if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
-control_play_pause.addEventListener("click", e => {
-  if (e.target.innerHTML === "⏸︎") {
+
+control_play_pause.addEventListener("click", event => {
+  if (event.target.innerHTML === "⏸︎") {  // Resume playback
     fetch(`${API_URL}/pause`).then(async r => {
       if (r.status >= 400) {
         console.error(`API returned ${r.status}: ${r.statusText}`);
       }
     });
-  } else {  // Pause
+  } else {  // Pause playback
     fetch(`${API_URL}/play`).then(async r => {
       if (r.status >= 400) {
         console.error(`API returned ${r.status}: ${r.statusText}`);
@@ -152,34 +187,42 @@ control_play_pause.addEventListener("click", e => {
     });
   }
 });
-control_stop.addEventListener("click", e => {
+
+control_stop.addEventListener("click", () => {
   fetch(`${API_URL}/stop`).then(async r => {
     if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
-control_next.addEventListener("click", e => {
+
+control_next.addEventListener("click", () => {
   fetch(`${API_URL}/next_track`).then(async r => {
     if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
-control_progress.addEventListener("change", e => {
-  fetch(`${API_URL}/seek/${e.target.value}`).then(async r => {
+
+control_progress.addEventListener("change", event => {
+  fetch(`${API_URL}/seek/${event.target.value}`).then(async r => {
     if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
-control_repeat.addEventListener("click", e => {
-  if (e.target.dataset.state === "on") {  // TODO: check is never true
-    e.target.innerHTML = "&#x1F518; repeat";
-    e.target.dataset.state = "off";
+
+control_progress.addEventListener("input", event => {
+  control_time.value = `${secondsToTrackTime(event.target.value)}/${secondsToTrackTime(event.target.max)}`;
+});
+
+control_repeat.addEventListener("click", event => {
+  if (event.target.dataset.state === "on") {  // TODO: check is never true
+    event.target.innerHTML = "&#x1F518; repeat";
+    event.target.dataset.state = "off";
   } else {
-    e.target.innerHTML = "&#x1F534; repeat";
-    e.target.dataset.state = "on";
+    event.target.innerHTML = "&#x1F534; repeat";
+    event.target.dataset.state = "on";
   }
   fetch(`${API_URL}/repeat`).then(async r => {
     if (r.status >= 400) {
@@ -187,13 +230,14 @@ control_repeat.addEventListener("click", e => {
     }
   });
 });
-control_shuffle.addEventListener("click", e => {
-  if (e.target.dataset.state === "on") {  // TODO: check is never true
-    e.target.innerHTML = "&#x1F518; shuffle";
-    e.target.dataset.state = "off";
+
+control_shuffle.addEventListener("click", event => {
+  if (event.target.dataset.state === "on") {  // TODO: check is never true
+    event.target.innerHTML = "&#x1F518; shuffle";
+    event.target.dataset.state = "off";
   } else {
-    e.target.innerHTML = "&#x1F534; shuffle";
-    e.target.dataset.state = "on";
+    event.target.innerHTML = "&#x1F534; shuffle";
+    event.target.dataset.state = "on";
   }
   fetch(`${API_URL}/random`).then(async r => {
     if (r.status >= 400) {
@@ -201,7 +245,8 @@ control_shuffle.addEventListener("click", e => {
     }
   });
 });
-control_xfade_minus.addEventListener("click", e => {
+
+control_xfade_minus.addEventListener("click", () => {
   // TODO: not yet implemented
   fetch(`${API_URL}/xfade`).then(async r => {
     if (r.status >= 400) {
@@ -209,7 +254,8 @@ control_xfade_minus.addEventListener("click", e => {
     }
   });
 });
-control_xfade_plus.addEventListener("click", e => {
+
+control_xfade_plus.addEventListener("click", () => {
   // TODO: not yet implemented
   fetch(`${API_URL}/xfade`).then(async r => {
     if (r.status >= 400) {
@@ -217,47 +263,52 @@ control_xfade_plus.addEventListener("click", e => {
     }
   });
 });
-control_volume_up.addEventListener("click", e => {
-  const v = Math.min(parseInt(control_volume.value) + VOLUME_STEP, 100);
-  fetch(`${API_URL}/volume/${v}`).then(async r => {
+
+control_volume_up.addEventListener("click", () => {
+  const volume = Math.min(parseInt(control_volume.value) + VOLUME_STEP, 100);
+  fetch(`${API_URL}/volume/${volume}`).then(async r => {
     if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
-  control_volume.value = v;
+  control_volume.value = volume;
 
 });
-control_volume_down.addEventListener("click", e => {
-  const v = Math.max(parseInt(control_volume.value) - VOLUME_STEP, 0);
-  fetch(`${API_URL}/volume/${v}`).then(async r => {
+
+control_volume_down.addEventListener("click", () => {
+  const volume = Math.max(parseInt(control_volume.value) - VOLUME_STEP, 0);
+  fetch(`${API_URL}/volume/${volume}`).then(async r => {
     if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
-  control_volume.value = v;
+  control_volume.value = volume;
 });
-control_volume.addEventListener("change", e => {
-  fetch(`${API_URL}/volume/${e.target.value}`).then(async r => {
+
+control_volume.addEventListener("change", event => {
+  fetch(`${API_URL}/volume/${event.target.value}`).then(async r => {
     if (r.status >= 400) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
+
+// Websocket logic
 
 // Create WebSocket connection.
 const socket = new WebSocket(`${document.location.protocol === "https:" ? "wss" : "ws"}://${document.location.host}/ws`);
 
 // Connection opened
-socket.addEventListener("open", (e) => {
+socket.addEventListener("open", () => {
   socket.send("Hello Server!");
 });
 
 // Listen for messages and update UI state
-socket.addEventListener("message", (e) => {
+socket.addEventListener("message", event => {
   // Print out mpd response
-  console.log(`DEBUG: ${e.data}`);  // DEBUG
+  console.log(`DEBUG: ${event.data}`);  // DEBUG
 
-  const msg = JSON.parse(e.data);
+  const msg = JSON.parse(event.data);
 
   if ("mpd_status" in msg) {
     if (msg.mpd_status == null) {
@@ -286,20 +337,13 @@ socket.addEventListener("message", (e) => {
       }
 
       // update playback time
-      if ("elapsed" in msg.mpd_status && "duration" in msg.mpd_status) {
-        const elapsed_hours = Math.floor(msg.mpd_status.elapsed / 3600);
-        const elapsed_minutes = Math.floor((msg.mpd_status.elapsed - elapsed_hours * 3600) / 60);
-        const elapsed_seconds = Math.floor(msg.mpd_status.elapsed - elapsed_hours * 3600 - elapsed_minutes * 60);
-        const duration_hours = Math.floor(msg.mpd_status.duration / 3600);
-        const duration_minutes = Math.floor((msg.mpd_status.duration - duration_hours * 3600) / 60);
-        const duration_seconds = Math.floor(msg.mpd_status.duration - duration_hours * 3600 - duration_minutes * 60);
-        control_time.value = `${elapsed_hours}:${elapsed_minutes.toString().padStart(2, '0')}:${elapsed_seconds.toString().padStart(2, '0')}/${duration_hours}:${duration_minutes.toString().padStart(2, '0')}:${duration_seconds.toString().padStart(2, '0')}`;
-      }
-      if ("elapsed" in msg.mpd_status) {
-        control_progress.value = msg.mpd_status.elapsed;
-      }
-      if ("duration" in msg.mpd_status) {
-        control_progress.max = msg.mpd_status.duration;
+      if ("time" in msg.mpd_status) {
+        const [elapsed, duration] = msg.mpd_status.time.split(":", 2)
+        control_progress.value = elapsed;
+        control_progress.max = duration;
+        // triggers the update of control_time element
+        const e = new Event("input");
+        control_progress.dispatchEvent(e);
       }
 
       // update repeat state
@@ -340,79 +384,68 @@ socket.addEventListener("message", (e) => {
   if ("mpd_current_song" in msg && msg.mpd_current_song != null) {
     let track;
     if ("Artist" in msg.mpd_current_song && "Title" in msg.mpd_current_song) {
-      track = `<span>${msg.mpd_current_song.Artist} - ${msg.mpd_current_song.Title}</span>`
+      track = `${msg.mpd_current_song.Artist} - ${msg.mpd_current_song.Title}`
     } else {
-      track = `<span>${msg.mpd_current_song.file}</span>`;
+      track = msg.mpd_current_song.file;
     }
-    if (control_track.innerHTML.toString() !== track) {
-      control_track.innerHTML = track;
+    if (control_track.innerHTML !== `<span>${track}</span>`) {
+      control_track.innerHTML = `<span>${track}</span>`;
     }
   }
 
   // update queue
   if ("mpd_queue" in msg && msg.mpd_queue != null) {
     const tbody = document.createElement("tbody");
-    msg.mpd_queue.forEach(elem => {
+    msg.mpd_queue.forEach(song => {
       const tr = document.createElement("tr");
-      tr.dataset.song_id = elem.Id;
-      if ("songid" in msg.mpd_status && msg.mpd_status.songid === elem.Id) {
+      tr.dataset.song_id = song.Id;
+      if ("songid" in msg.mpd_status && msg.mpd_status.songid === song.Id) {
         tr.classList.add("playing");
-      } else {
-        tr.classList.remove("playing");
       }
-      // TODO: check if current row is currently playing track
       const pos = document.createElement("td");
-      pos.innerText = elem.Pos;
+      pos.innerText = song.Pos;
       const artist = document.createElement("td");
-      if ("Artist" in elem) {
-        artist.innerText = elem.Artist;
+      if ("Artist" in song) {
+        artist.innerText = song.Artist;
       }
       const track = document.createElement("td");
-      if ("Title" in elem) {
-        track.innerText = elem.Title;
+      if ("Title" in song) {
+        track.innerText = song.Title;
       } else {
-        track.innerText = elem.file;
+        track.innerText = song.file;
       }
       const album = document.createElement("td");
-      // album.innerText = "";
+      // TODO: Do songs have album info attached to them?
+      album.innerText = "";
       const length = document.createElement("td");
-      const duration_hours = Math.floor(elem.duration / 3600);
-      const duration_minutes = Math.floor((elem.duration - duration_hours * 3600) / 60);
-      const duration_seconds = Math.floor(elem.duration - duration_hours * 3600 - duration_minutes * 60);
-      length.innerText = `${duration_hours}:${duration_minutes.toString().padStart(2, '0')}:${duration_seconds.toString().padStart(2, '0')}`;
+      length.innerText = secondsToTrackTime(song.duration);
       const actions = document.createElement("td");
-      // TODO: maybe use a instead of button?
-      const moveUp = document.createElement("button");
-      moveUp.classList.add("borderless");
-      moveUp.innerHTML = "&#x1F53A;"; // 🔺 Red Triangle Pointed Down
-      moveUp.addEventListener("click", event => {
-        console.log(`DEBUG: move song ${elem.Pos} up`);
-        // fetch(`${API_URL}/queue_del/${elem.Pos}`).then(r => {
-        //   console.log(r.text());
-        // });
-      });
-      // TODO: maybe use a instead of button?
-      const moveDown = document.createElement("button");
-      moveDown.classList.add("borderless");
-      moveDown.innerHTML = "&#x1F53B;"; // 🔻 Red Triangle Pointed Up
-      moveDown.addEventListener("click", event => {
-        console.log(`DEBUG: move song ${elem.Pos} down`);
-        // fetch(`${API_URL}/queue_del/${elem.Pos}`).then(r => {
-        //   console.log(r.text());
-        // });
-      });
-      // TODO: maybe use a instead of button?
+      if (parseInt(song.Pos) !== 0) {
+        const moveUp = document.createElement("button");
+        moveUp.classList.add("borderless");
+        moveUp.innerHTML = "&#x1F53A;"; // 🔺 Red Triangle Pointed Down
+        moveUp.addEventListener("click", event => { moveTrackInQueue(event, -1) });
+        actions.appendChild(moveUp);
+      } else {
+        const spacer = document.createElement("span")
+        spacer.innerHTML = "&emsp;";
+        actions.appendChild(spacer);
+      }
+      if (parseInt(song.Pos) !== msg.mpd_queue.length - 1) {
+        const moveDown = document.createElement("button");
+        moveDown.classList.add("borderless");
+        moveDown.innerHTML = "&#x1F53B;"; // 🔻 Red Triangle Pointed Up
+        moveDown.addEventListener("click", event => {moveTrackInQueue(event, 1)});
+        actions.appendChild(moveDown);
+      } else {
+        const spacer = document.createElement("span")
+        spacer.innerHTML = "&emsp;";
+        actions.appendChild(spacer);
+      }
       const remove = document.createElement("button");
       remove.classList.add("borderless");
       remove.innerHTML = "&#x274C;"; // ❌ Cross mark
-      remove.addEventListener("click", event => {
-      console.log(`DEBUG: remove song id ${elem.Id} from queue`);
-        fetch(`${API_URL}/queue/delete/${elem.Id}`).then(r => {
-          console.log(r.text());
-        });
-      });
-      actions.appendChild(moveUp);
-      actions.appendChild(moveDown);
+      remove.addEventListener("click", removeTrackFromQueue);
       actions.appendChild(remove);
       tr.appendChild(pos);
       tr.appendChild(artist);
@@ -438,8 +471,8 @@ socket.addEventListener("message", (e) => {
 window.setInterval(() => {
   if (socket.readyState === socket.OPEN) {
     socket.send("#status");
-    connection_state.innerHTML = "&#x2705; Connected";  // ❌ Cross Mark
+    connection_state.innerHTML = "&#x2705; Connected";  // ✅ Check Mark Button
   } else {
-    connection_state.innerHTML = "&#x274C; Disconnected";  // ✅ Check Mark Button
+    connection_state.innerHTML = "&#x274C; Disconnected";  // ❌ Cross Mark
   }
 }, 1000);
