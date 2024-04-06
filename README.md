@@ -18,7 +18,7 @@ chaos music control inspired by [relaxx player][relaxx]
 
 ## 👩‍💻 Installation
 
-### NixOS (flakes)
+### ❄️ NixOS (flakes)
 
 Example flake setup (untested):
 
@@ -48,7 +48,7 @@ Example flake setup (untested):
 }
 ```
 
-### Arch Linux
+### 🇦 Arch Linux
 
 Install from the AUR:
 
