@@ -16,7 +16,7 @@ chaos music control inspired by [relaxx player][relaxx]
 - add playlists from internet radios (`*.m3u`, `*.pls`)
 - add music from other sources like youtube (`youtube-dl`)
 
-## Installation
+## 👩‍💻 Installation
 
 ### NixOS (flakes)
 
