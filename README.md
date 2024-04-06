@@ -16,9 +16,9 @@ chaos music control inspired by [relaxx player][relaxx]
 - add playlists from internet radios (`*.m3u`, `*.pls`)
 - add music from other sources like youtube (`youtube-dl`)
 
-## Installation
+## 👩‍💻 Installation
 
-### NixOS (flakes)
+### ❄️ NixOS (flakes)
 
 Example flake setup (untested):
 
@@ -48,7 +48,7 @@ Example flake setup (untested):
 }
 ```
 
-### Arch Linux
+### 🇦 Arch Linux
 
 Install from the AUR:
 
