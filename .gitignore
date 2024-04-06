@@ -3,6 +3,8 @@ result
 # self-signed certs for testing
 cert.pem
 key.pem
+# test files
+*.mp3
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,windows,macos,vim,goland+all,go,direnv
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,macos,vim,goland+all,go,direnv

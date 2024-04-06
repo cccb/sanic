@@ -214,3 +214,27 @@ func setVolume(c echo.Context) error {
 
 	return c.String(http.StatusOK, "")
 }
+
+// Queue
+
+func deleteTrackFromQueue(c echo.Context) error {
+	// Connect to MPD server
+	conn, err := mpd.Dial("tcp", "localhost:6600")
+	if err != nil {
+		c.Logger().Error(err)
+	}
+	defer conn.Close()
+
+	songId, err := strconv.Atoi(c.Param("song_id"))
+	if err != nil {
+		c.Logger().Error(err)
+	}
+
+	err = conn.DeleteID(songId)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	return c.String(http.StatusOK, "")
+}

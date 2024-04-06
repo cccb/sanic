@@ -89,6 +89,8 @@ func main() {
 	g.GET("/random", toggleRandom)
 	g.GET("/volume/:level", setVolume)
 
+	g.GET("/queue/delete/:song_id", deleteTrackFromQueue)
+
 	g.GET("/download", downloadTrack)
 
 	e.GET("/ws", wsServe)

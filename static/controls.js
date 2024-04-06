@@ -406,8 +406,8 @@ socket.addEventListener("message", (e) => {
       remove.classList.add("borderless");
       remove.innerHTML = "&#x274C;"; // ❌ Cross mark
       remove.addEventListener("click", event => {
-        console.log(`DEBUG: remove song ${elem.Pos} from queue`);
-        fetch(`${API_URL}/queue_del/${elem.Pos}`).then(r => {
+      console.log(`DEBUG: remove song id ${elem.Id} from queue`);
+        fetch(`${API_URL}/queue/delete/${elem.Id}`).then(r => {
           console.log(r.text());
         });
       });
