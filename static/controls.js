@@ -106,6 +106,18 @@ tab_search.addEventListener("click", e => {
 });
 
 tab_playlists.addEventListener("click", e => {
+  fetch(`${API_URL}/playlists`).then(async r => {
+    if (r.status === 200) {
+      const playlists = await r.json();
+      control_playlist_list.options.length = 0;  // clear playlists
+      playlists.forEach(p => {
+        const option = document.createElement("option")
+        option.appendChild(document.createTextNode(p["playlist"]));
+        option.value = p["playlist"];
+        control_playlist_list.appendChild(option)
+      });
+    }
+  });
   if (!tab_playlists.classList.contains("active")) {
     tab_browser.classList.remove("active");
     tab_search.classList.remove("active")

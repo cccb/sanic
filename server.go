@@ -91,6 +91,8 @@ func main() {
 
 	g.GET("/queue/delete/:song_id", deleteTrackFromQueue)
 
+	g.GET("/playlists", listPlaylists)
+
 	g.GET("/download", downloadTrack)
 
 	e.GET("/ws", wsServe)
