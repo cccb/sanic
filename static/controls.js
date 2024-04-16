@@ -37,6 +37,7 @@ const control_replace_playlist = document.getElementById("control-replace-playli
 const control_attach_playlist = document.getElementById("control-attach-playlist");
 const control_save_playlist = document.getElementById("control-save-playlist");
 const control_delete_playlist = document.getElementById("control-delete-playlist");
+const result_table = document.querySelector("#result tbody");
 
 // UI controls
 
@@ -112,8 +113,36 @@ tab_playlists.addEventListener("click", e => {
       control_playlist_list.options.length = 0;  // clear playlists
       playlists.forEach(p => {
         const option = document.createElement("option")
-        option.appendChild(document.createTextNode(p["playlist"]));
+        option.innerText = p["playlist"];
         option.value = p["playlist"];
+        option.addEventListener("click", () => {
+          fetch(`${API_URL}/playlists/${p["playlist"]}`).then(async r => {
+            if (r.status === 200) {
+              const songs = await r.json();
+              console.log(songs)
+              result_table.innerHTML = "";
+              songs.forEach(song => {
+                const tr = document.createElement("tr");
+                const artist = document.createElement("td");
+                artist.innerText = song["Artist"];
+                const title = document.createElement("td");
+                title.innerText = song["Title"];
+                const time = document.createElement("td");
+                const seconds = parseInt(song["Time"]);
+                const time_hours = Math.floor(seconds / 3600);
+                const time_minutes = Math.floor((seconds - time_hours * 3600) / 60);
+                const time_seconds = Math.floor(seconds - time_hours * 3600 - time_minutes * 60);
+                time.innerText = `${time_hours}:${time_minutes.toString().padStart(2, '0')}:${time_seconds.toString().padStart(2, '0')}`
+                tr.appendChild(artist);
+                tr.appendChild(title);
+                tr.appendChild(document.createElement("td")); // album
+                tr.appendChild(document.createElement("td")); // genre
+                tr.appendChild(time);
+                result_table.appendChild(tr);
+              });
+            }
+          })
+        });
         control_playlist_list.appendChild(option)
       });
     }
