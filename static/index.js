@@ -37,6 +37,7 @@ const control_replace_playlist = document.getElementById("control-replace-playli
 const control_attach_playlist = document.getElementById("control-attach-playlist");
 const control_save_playlist = document.getElementById("control-save-playlist");
 const control_delete_playlist = document.getElementById("control-delete-playlist");
+const result_table = document.querySelector("#result tbody");
 
 // Utility functions
 
@@ -152,7 +153,78 @@ control_delete_playlist.addEventListener("click", () => {
   });
 });
 
-control_update_db.addEventListener("click", event => {
+tab_browser.addEventListener("click", e => {
+  if (!tab_browser.classList.contains("active")) {
+    tab_browser.classList.add("active");
+    tab_search.classList.remove("active")
+    tab_playlists.classList.remove("active")
+    document.getElementById("file-browser").style.display = "block";
+    document.getElementById("search").style.display = "none";
+    document.getElementById("playlist-browser").style.display = "none";
+  }
+});
+
+tab_search.addEventListener("click", e => {
+  if (!tab_search.classList.contains("active")) {
+    tab_browser.classList.remove("active");
+    tab_search.classList.add("active")
+    tab_playlists.classList.remove("active")
+    document.getElementById("file-browser").style.display = "none";
+    document.getElementById("search").style.display = "block";
+    document.getElementById("playlist-browser").style.display = "none";
+  }
+});
+
+tab_playlists.addEventListener("click", e => {
+  fetch(`${API_URL}/playlists`).then(async r => {
+    if (r.status === 200) {
+      const playlists = await r.json();
+      control_playlist_list.options.length = 0;  // clear playlists
+      playlists.forEach(p => {
+        const option = document.createElement("option")
+        option.innerText = p["playlist"];
+        option.value = p["playlist"];
+        option.addEventListener("click", () => {
+          fetch(`${API_URL}/playlists/${p["playlist"]}`).then(async r => {
+            if (r.status === 200) {
+              const songs = await r.json();
+              console.log(songs)
+              result_table.innerHTML = "";
+              songs.forEach(song => {
+                const tr = document.createElement("tr");
+                const artist = document.createElement("td");
+                artist.innerText = song["Artist"];
+                const title = document.createElement("td");
+                title.innerText = song["Title"];
+                const time = document.createElement("td");
+                time.innerText = secondsToTrackTime(parseInt(song["Time"]))
+                tr.appendChild(artist);
+                tr.appendChild(title);
+                tr.appendChild(document.createElement("td")); // album
+                tr.appendChild(document.createElement("td")); // genre
+                tr.appendChild(time);
+                result_table.appendChild(tr);
+              });
+            }
+          })
+        });
+        control_playlist_list.appendChild(option)
+      });
+    }
+  });
+  if (!tab_playlists.classList.contains("active")) {
+    tab_browser.classList.remove("active");
+    tab_search.classList.remove("active")
+    tab_playlists.classList.add("active")
+    document.getElementById("file-browser").style.display = "none";
+    document.getElementById("search").style.display = "none";
+    document.getElementById("playlist-browser").style.display = "block";
+  }
+});
+
+// Add API calls to controls
+
+control_update_db.addEventListener("click", e => {
   console.log("Issuing database update")
   fetch(`${API_URL}/update_db`).then(async r => {
     if (r.status === 200) {
@@ -472,3 +544,4 @@ window.setInterval(() => {
     connection_state.innerHTML = "&#x274C; Disconnected";  // ❌ Cross Mark
   }
 }, 1000);
+

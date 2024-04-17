@@ -273,3 +273,41 @@ func moveTrackInQueue(c echo.Context) error {
 
 	return c.String(http.StatusOK, fmt.Sprintf("Moved song %d to position %d", songId, position))
 }
+
+// Playlists
+
+func listPlaylists(c echo.Context) error {
+	// Connect to MPD server
+	conn, err := mpd.Dial("tcp", "localhost:6600")
+	if err != nil {
+		c.Logger().Error(err)
+	}
+	defer conn.Close()
+
+	playlists, err := conn.ListPlaylists()
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, playlists)
+}
+
+func listPlaylist(c echo.Context) error {
+	// Connect to MPD server
+	conn, err := mpd.Dial("tcp", "localhost:6600")
+	if err != nil {
+		c.Logger().Error(err)
+	}
+	defer conn.Close()
+
+	name := c.Param("name")
+
+	playlist, err := conn.PlaylistContents(name)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, playlist)
+}
