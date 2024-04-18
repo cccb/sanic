@@ -274,6 +274,49 @@ func moveTrackInQueue(c echo.Context) error {
 	return c.String(http.StatusOK, fmt.Sprintf("Moved song %d to position %d", songId, position))
 }
 
+func attachPlaylist(c echo.Context) error {
+	// Connect to MPD server
+	conn, err := mpd.Dial("tcp", "localhost:6600")
+	if err != nil {
+		c.Logger().Error(err)
+	}
+	defer conn.Close()
+
+	name := c.Param("playlist_name")
+
+	err = conn.PlaylistLoad(name, -1, -1)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, "")
+}
+
+func replaceQueue(c echo.Context) error {
+	// Connect to MPD server
+	conn, err := mpd.Dial("tcp", "localhost:6600")
+	if err != nil {
+		c.Logger().Error(err)
+	}
+	defer conn.Close()
+
+	name := c.Param("playlist_name")
+
+	err = conn.Clear()
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	err = conn.PlaylistLoad(name, -1, -1)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, "")
+}
+
 // Playlists
 
 func listPlaylists(c echo.Context) error {
@@ -312,7 +355,7 @@ func listPlaylist(c echo.Context) error {
 	return c.JSON(http.StatusOK, playlist)
 }
 
-func replaceQueue(c echo.Context) error {
+func deletePlaylist(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
 	if err != nil {
@@ -320,37 +363,14 @@ func replaceQueue(c echo.Context) error {
 	}
 	defer conn.Close()
 
-	name := c.Param("playlist_name")
+	name := c.Param("name")
 
-	err = conn.Clear()
+	err = conn.PlaylistRemove(name)
 	if err != nil {
-		c.Logger().Error(err)
-		return c.String(http.StatusInternalServerError, err.Error())
-	}
-	err = conn.PlaylistLoad(name, -1, -1)
-	if err != nil {
+		c.Logger().Error(fmt.Sprintf("Couldn't delete playlist %s", name))
 		c.Logger().Error(err)
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, "")
-}
-
-func attachPlaylist(c echo.Context) error {
-	// Connect to MPD server
-	conn, err := mpd.Dial("tcp", "localhost:6600")
-	if err != nil {
-		c.Logger().Error(err)
-	}
-	defer conn.Close()
-
-	name := c.Param("playlist_name")
-
-	err = conn.PlaylistLoad(name, -1, -1)
-	if err != nil {
-		c.Logger().Error(err)
-		return c.String(http.StatusBadRequest, err.Error())
-	}
-
-	return c.JSON(http.StatusOK, "")
+	return c.JSON(http.StatusNoContent, "")
 }

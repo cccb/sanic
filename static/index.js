@@ -69,6 +69,46 @@ moveTrackInQueue = (event, direction) => {
   });
 }
 
+refreshPlaylists = () => {
+  console.log("Refreshing playlists from MPD server")
+  fetch(`${API_URL}/playlists`).then(async r => {
+    if (r.status === 200) {
+      const playlists = await r.json();
+      control_playlist_list.options.length = 0;  // clear playlists
+      playlists.forEach(p => {
+        const option = document.createElement("option")
+        option.innerText = p["playlist"];
+        option.value = p["playlist"];
+        option.addEventListener("click", () => {
+          fetch(`${API_URL}/playlists/${p["playlist"]}`).then(async r => {
+            if (r.status === 200) {
+              const songs = await r.json();
+              console.log(songs)
+              result_table.innerHTML = "";
+              songs.forEach(song => {
+                const tr = document.createElement("tr");
+                const artist = document.createElement("td");
+                artist.innerText = song["Artist"];
+                const title = document.createElement("td");
+                title.innerText = song["Title"];
+                const time = document.createElement("td");
+                time.innerText = secondsToTrackTime(parseInt(song["Time"]))
+                tr.appendChild(artist);
+                tr.appendChild(title);
+                tr.appendChild(document.createElement("td")); // album
+                tr.appendChild(document.createElement("td")); // genre
+                tr.appendChild(time);
+                result_table.appendChild(tr);
+              });
+            }
+          })
+        });
+        control_playlist_list.appendChild(option)
+      });
+    }
+  });
+}
+
 // UI controls
 
 tab_browser.addEventListener("click", () => {
@@ -143,10 +183,11 @@ dialog_save_playlist_submit.addEventListener("click", () => {
 });
 
 control_delete_playlist.addEventListener("click", () => {
-  const playlist_id = control_playlist_list.value;
-  fetch(`${API_URL}/playlists/${playlist_id}`, {method: "DELETE"}).then(r => {
+  const playlist_name = control_playlist_list.value;
+  fetch(`${API_URL}/playlists/${control_playlist_list.value}`, {method: "DELETE"}).then(r => {
     if (r.status === 204) {
-      console.log(`Playlist ${playlist_id} successfully deleted.`);
+      console.log(`Playlist "${playlist_name}" successfully deleted.`);
+      refreshPlaylists();
     } else {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
@@ -176,42 +217,7 @@ tab_search.addEventListener("click", () => {
 });
 
 tab_playlists.addEventListener("click", () => {
-  fetch(`${API_URL}/playlists`).then(async r => {
-    if (r.status === 200) {
-      const playlists = await r.json();
-      control_playlist_list.options.length = 0;  // clear playlists
-      playlists.forEach(p => {
-        const option = document.createElement("option")
-        option.innerText = p["playlist"];
-        option.value = p["playlist"];
-        option.addEventListener("click", () => {
-          fetch(`${API_URL}/playlists/${p["playlist"]}`).then(async r => {
-            if (r.status === 200) {
-              const songs = await r.json();
-              console.log(songs)
-              result_table.innerHTML = "";
-              songs.forEach(song => {
-                const tr = document.createElement("tr");
-                const artist = document.createElement("td");
-                artist.innerText = song["Artist"];
-                const title = document.createElement("td");
-                title.innerText = song["Title"];
-                const time = document.createElement("td");
-                time.innerText = secondsToTrackTime(parseInt(song["Time"]))
-                tr.appendChild(artist);
-                tr.appendChild(title);
-                tr.appendChild(document.createElement("td")); // album
-                tr.appendChild(document.createElement("td")); // genre
-                tr.appendChild(time);
-                result_table.appendChild(tr);
-              });
-            }
-          })
-        });
-        control_playlist_list.appendChild(option)
-      });
-    }
-  });
+  refreshPlaylists();
   if (!tab_playlists.classList.contains("active")) {
     tab_browser.classList.remove("active");
     tab_search.classList.remove("active")

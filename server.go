@@ -96,6 +96,7 @@ func main() {
 
 	g.GET("/playlists", listPlaylists)
 	g.GET("/playlists/:name", listPlaylist)
+	g.DELETE("/playlists/:name", deletePlaylist)
 
 	g.GET("/download", downloadTrack)
 
