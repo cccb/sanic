@@ -4,8 +4,8 @@ go 1.21
 
 require (
 	github.com/fhs/gompd/v2 v2.3.0
-	github.com/labstack/echo-contrib v0.16.0
-	github.com/labstack/echo/v4 v4.11.4
+	github.com/labstack/echo-contrib v0.17.0
+	github.com/labstack/echo/v4 v4.12.0
 	golang.org/x/net v0.24.0
 	gopkg.in/ini.v1 v1.67.0
 )
@@ -19,7 +19,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/prometheus/client_golang v1.19.0 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
-	github.com/prometheus/common v0.52.2 // indirect
+	github.com/prometheus/common v0.52.3 // indirect
 	github.com/prometheus/procfs v0.13.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
