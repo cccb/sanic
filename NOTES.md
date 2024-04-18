@@ -45,8 +45,8 @@
   - [ ] Select tracks in results
   - [ ] `Add` selected tracks to queue button
 - Playlist browser
-  - [ ] Show current playlists
-  - [ ] `Replace` current queue with playlist button
+  - [x] Show current playlists
+  - [x] `Replace` current queue with playlist button
   - [ ] `Attach` playlist to current queue button
   - [ ] `Save` current queue as playlist button
     - [x] Show dialog
@@ -77,8 +77,10 @@
   - [ ] POST `/api/queue` `{"song_id": 123}`
   - [x] GET `/api/queue/:song_id/delete`
   - [x] GET `/api/queue/:song_id/move/:position`
+  - [x] GET `/api/queue/replace/:playlist_name`
   - [ ] `/api/list_database/:path`
-  - [ ] `/api/list_playlists`
+  - [x] GET `/api/playlists`
+  - [x] GET `/api/playlists/:name`
   - [ ] `/api/save_playlist`
   - [ ] `/api/delete_playlist`
 

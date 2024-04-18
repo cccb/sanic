@@ -91,6 +91,7 @@ func main() {
 
 	g.GET("/queue/:song_id/delete", deleteTrackFromQueue)
 	g.GET("/queue/:song_id/move/:position", moveTrackInQueue)
+	g.GET("/queue/replace/:playlist_name", replaceQueue)
 
 	g.GET("/playlists", listPlaylists)
 	g.GET("/playlists/:name", listPlaylist)

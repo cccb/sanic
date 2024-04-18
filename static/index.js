@@ -118,15 +118,15 @@ dialog_save_playlist_close.addEventListener("click", () => {
 
 // Add API calls to controls
 
-control_replace_playlist.addEventListener("click", e => {
-  fetch(`${API_URL}/`).then(async r => {
+control_replace_playlist.addEventListener("click", () => {
+  fetch(`${API_URL}/queue/replace/${control_playlist_list.value}`).then(async r => {
     if (r.status !== 200) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });
 
-control_attach_playlist.addEventListener("click", e => {
+control_attach_playlist.addEventListener("click", () => {
   fetch(`${API_URL}/`).then(async r => {
     if (r.status !== 200) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
@@ -153,7 +153,7 @@ control_delete_playlist.addEventListener("click", () => {
   });
 });
 
-tab_browser.addEventListener("click", e => {
+tab_browser.addEventListener("click", () => {
   if (!tab_browser.classList.contains("active")) {
     tab_browser.classList.add("active");
     tab_search.classList.remove("active")
@@ -164,7 +164,7 @@ tab_browser.addEventListener("click", e => {
   }
 });
 
-tab_search.addEventListener("click", e => {
+tab_search.addEventListener("click", () => {
   if (!tab_search.classList.contains("active")) {
     tab_browser.classList.remove("active");
     tab_search.classList.add("active")
@@ -175,7 +175,7 @@ tab_search.addEventListener("click", e => {
   }
 });
 
-tab_playlists.addEventListener("click", e => {
+tab_playlists.addEventListener("click", () => {
   fetch(`${API_URL}/playlists`).then(async r => {
     if (r.status === 200) {
       const playlists = await r.json();
@@ -224,7 +224,7 @@ tab_playlists.addEventListener("click", e => {
 
 // Add API calls to controls
 
-control_update_db.addEventListener("click", e => {
+control_update_db.addEventListener("click", () => {
   console.log("Issuing database update")
   fetch(`${API_URL}/update_db`).then(async r => {
     if (r.status === 200) {

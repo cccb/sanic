@@ -311,3 +311,27 @@ func listPlaylist(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, playlist)
 }
+
+func replaceQueue(c echo.Context) error {
+	// Connect to MPD server
+	conn, err := mpd.Dial("tcp", "localhost:6600")
+	if err != nil {
+		c.Logger().Error(err)
+	}
+	defer conn.Close()
+
+	name := c.Param("playlist_name")
+
+	err = conn.Clear()
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	err = conn.PlaylistLoad(name, -1, -1)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, "")
+}
