@@ -1,4 +1,4 @@
-module git.berlin.ccc.de/cccb/sanic
+module gitlab.com/XenGi/sanic
 
 go 1.21
 
