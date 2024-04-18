@@ -47,7 +47,7 @@
 - Playlist browser
   - [x] Show current playlists
   - [x] `Replace` current queue with playlist button
-  - [ ] `Attach` playlist to current queue button
+  - [x] `Attach` playlist to current queue button
   - [ ] `Save` current queue as playlist button
     - [x] Show dialog
   - [ ] `Delete` selected playlist button
@@ -78,6 +78,7 @@
   - [x] GET `/api/queue/:song_id/delete`
   - [x] GET `/api/queue/:song_id/move/:position`
   - [x] GET `/api/queue/replace/:playlist_name`
+  - [x] GET `/api/queue/attach/:playlist_name`
   - [ ] `/api/list_database/:path`
   - [x] GET `/api/playlists`
   - [x] GET `/api/playlists/:name`

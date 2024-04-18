@@ -127,7 +127,7 @@ control_replace_playlist.addEventListener("click", () => {
 });
 
 control_attach_playlist.addEventListener("click", () => {
-  fetch(`${API_URL}/`).then(async r => {
+  fetch(`${API_URL}/queue/attach/${control_playlist_list.value}`).then(async r => {
     if (r.status !== 200) {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
