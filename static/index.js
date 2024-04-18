@@ -7,7 +7,7 @@ const VOLUME_STEP = 5;
 
 const dialog_save_playlist = document.getElementById("save-playlist");
 const control_playlist_name = document.getElementById("control-playlist-name");
-const dialog_save_playlist_submit = document.querySelector("#save-playlist button");
+const dialog_save_playlist_submit = document.querySelector("#save-playlist form button");
 const dialog_save_playlist_close = document.querySelector("#save-playlist .close");
 
 const connection_state = document.getElementById("connection-state");
@@ -144,10 +144,12 @@ tab_playlists.addEventListener("click", () => {
   }
 });
 
+// Show "Save playlist" modal
 control_save_playlist.addEventListener("click", () => {
   dialog_save_playlist.showModal()
 });
 
+// Close "Save playlist" modal
 dialog_save_playlist_close.addEventListener("click", () => {
   dialog_save_playlist.close()
 });
@@ -174,10 +176,14 @@ control_attach_playlist.addEventListener("click", () => {
   });
 });
 
+// Save current queue as new playlist and refresh playlist list
 dialog_save_playlist_submit.addEventListener("click", () => {
-  fetch(`${API_URL}/playlists`, {method: "PUT"}).then(async r => {
+  fetch(`${API_URL}/playlists/${control_playlist_name.value}`, {method: "POST"}).then(async r => {
     if (r.status === 201) {
       console.log(`Playlist "${control_playlist_name.value}" saved`)
+      refreshPlaylists()
+    } else {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   });
 });

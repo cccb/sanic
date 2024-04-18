@@ -367,10 +367,28 @@ func deletePlaylist(c echo.Context) error {
 
 	err = conn.PlaylistRemove(name)
 	if err != nil {
-		c.Logger().Error(fmt.Sprintf("Couldn't delete playlist %s", name))
 		c.Logger().Error(err)
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
 	return c.JSON(http.StatusNoContent, "")
+}
+
+func savePlaylist(c echo.Context) error {
+	// Connect to MPD server
+	conn, err := mpd.Dial("tcp", "localhost:6600")
+	if err != nil {
+		c.Logger().Error(err)
+	}
+	defer conn.Close()
+
+	name := c.Param("name")
+
+	err = conn.PlaylistSave(name)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	return c.JSON(http.StatusCreated, "")
 }

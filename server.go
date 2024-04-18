@@ -95,6 +95,7 @@ func main() {
 	g.GET("/queue/attach/:playlist_name", attachPlaylist)
 
 	g.GET("/playlists", listPlaylists)
+	g.POST("/playlists/:name", savePlaylist)
 	g.GET("/playlists/:name", listPlaylist)
 	g.DELETE("/playlists/:name", deletePlaylist)
 

@@ -48,7 +48,7 @@
   - [x] Show current playlists
   - [x] `Replace` current queue with playlist button
   - [x] `Attach` playlist to current queue button
-  - [ ] `Save` current queue as playlist button
+  - [x] `Save` current queue as playlist button
     - [x] Show dialog
   - [x] `Delete` selected playlist button
     
@@ -81,8 +81,6 @@
   - [x] GET `/api/queue/attach/:playlist_name`
   - [ ] `/api/list_database/:path`
   - [x] GET `/api/playlists`
+  - [x] POST `/api/playlists/:name`
   - [x] GET `/api/playlists/:name`
   - [x] DELETE `/api/playlists/:name`
-  - [ ] `/api/save_playlist`
-  - [ ] `/api/delete_playlist`
-
