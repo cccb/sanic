@@ -38,6 +38,8 @@ const control_attach_playlist = document.getElementById("control-attach-playlist
 const control_save_playlist = document.getElementById("control-save-playlist");
 const control_delete_playlist = document.getElementById("control-delete-playlist");
 const result_table = document.querySelector("#result tbody");
+const control_search_pattern = document.getElementById("control-search-pattern");
+const control_search_submit = document.getElementById("control-search-submit");
 
 // Utility functions
 
@@ -82,30 +84,32 @@ refreshPlaylists = () => {
         option.addEventListener("click", () => {
           fetch(`${API_URL}/playlists/${p["playlist"]}`).then(async r => {
             if (r.status === 200) {
-              const songs = await r.json();
-              console.log(songs)
-              result_table.innerHTML = "";
-              songs.forEach(song => {
-                const tr = document.createElement("tr");
-                const artist = document.createElement("td");
-                artist.innerText = song["Artist"];
-                const title = document.createElement("td");
-                title.innerText = song["Title"];
-                const time = document.createElement("td");
-                time.innerText = secondsToTrackTime(parseInt(song["Time"]))
-                tr.appendChild(artist);
-                tr.appendChild(title);
-                tr.appendChild(document.createElement("td")); // album
-                tr.appendChild(document.createElement("td")); // genre
-                tr.appendChild(time);
-                result_table.appendChild(tr);
-              });
+              fillResultTable(await r.json());
             }
           })
         });
         control_playlist_list.appendChild(option)
       });
     }
+  });
+}
+
+fillResultTable = (songs) => {
+  result_table.innerHTML = "";
+  songs.forEach(song => {
+    const tr = document.createElement("tr");
+    const artist = document.createElement("td");
+    artist.innerText = song["Artist"];
+    const title = document.createElement("td");
+    title.innerText = song["Title"];
+    const time = document.createElement("td");
+    time.innerText = secondsToTrackTime(parseInt(song["Time"]))
+    tr.appendChild(artist);
+    tr.appendChild(title);
+    tr.appendChild(document.createElement("td")); // album
+    tr.appendChild(document.createElement("td")); // genre
+    tr.appendChild(time);
+    result_table.appendChild(tr);
   });
 }
 
@@ -154,11 +158,19 @@ dialog_save_playlist_close.addEventListener("click", () => {
   dialog_save_playlist.close()
 });
 
-// control_progress.addEventListener("change", event => {
-//   control_time.value = `${secondsToTrackTime(event.target.value)}/${secondsToTrackTime(event.target.max)}`;
-// });
 
 // Add API calls to controls
+
+control_search_submit.addEventListener("click", event => {
+  event.preventDefault()
+  fetch(`${API_URL}/database/${control_search_pattern.value}`).then(async r => {
+    if (r.status === 200) {
+      fillResultTable([...new Set(await r.json())]);
+    } else {
+      console.error(`API returned ${r.status}: ${r.statusText}`);
+    }
+  })
+});
 
 control_replace_playlist.addEventListener("click", () => {
   fetch(`${API_URL}/queue/replace/${control_playlist_list.value}`).then(async r => {

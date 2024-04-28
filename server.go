@@ -99,6 +99,8 @@ func main() {
 	g.GET("/playlists/:name", listPlaylist)
 	g.DELETE("/playlists/:name", deletePlaylist)
 
+	g.GET("/database/:pattern", searchDatabase)
+
 	g.GET("/download", downloadTrack)
 
 	e.GET("/ws", wsServe)

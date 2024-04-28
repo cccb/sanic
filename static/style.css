@@ -426,3 +426,12 @@ dialog .close {
   top: 1pt;
   right: 1pt;
 }
+
+#control-search-pattern {
+  margin: 1em;
+}
+
+#search:first-child {
+  display: flex;
+  justify-content: space-between;
+}

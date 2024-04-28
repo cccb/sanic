@@ -79,7 +79,7 @@
   - [x] GET `/api/queue/:song_id/move/:position`
   - [x] GET `/api/queue/replace/:playlist_name`
   - [x] GET `/api/queue/attach/:playlist_name`
-  - [ ] `/api/list_database/:path`
+  - [ ] GET `/api/database/:path`
   - [x] GET `/api/playlists`
   - [x] POST `/api/playlists/:name`
   - [x] GET `/api/playlists/:name`

@@ -371,7 +371,7 @@ func deletePlaylist(c echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusNoContent, "")
+	return c.String(http.StatusNoContent, "")
 }
 
 func savePlaylist(c echo.Context) error {
@@ -390,5 +390,46 @@ func savePlaylist(c echo.Context) error {
 		return c.String(http.StatusBadRequest, err.Error())
 	}
 
-	return c.JSON(http.StatusCreated, "")
+	return c.String(http.StatusCreated, "")
+}
+
+func searchDatabase(c echo.Context) error {
+	// Connect to MPD server
+	conn, err := mpd.Dial("tcp", "localhost:6600")
+	if err != nil {
+		c.Logger().Error(err)
+	}
+	defer conn.Close()
+
+	pattern := c.Param("pattern")
+
+	artistResult, err := conn.Search("artist", pattern)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+	albumResult, err := conn.Search("album", pattern)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+	titleResult, err := conn.Search("title", pattern)
+	if err != nil {
+		c.Logger().Error(err)
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+
+	songs := append(append(artistResult, albumResult...), titleResult...)
+
+	// make list unique
+	uniqueList := make([]mpd.Attrs, 0, len(songs))
+	keep := make(map[string]bool)
+	for _, song := range songs {
+		if _, ok := keep[song["file"]]; !ok {
+			keep[song["file"]] = true
+			uniqueList = append(uniqueList, song)
+		}
+	}
+
+	return c.JSON(http.StatusOK, uniqueList)
 }
