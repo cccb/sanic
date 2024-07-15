@@ -16,6 +16,7 @@ import (
 	"strings"
 )
 
+// Config holds the configuration for the mpd connection and for the web server.
 type Config struct {
 	MPD struct {
 		Hostname string `ini:"hostname"`
@@ -112,6 +113,7 @@ func main() {
 	}
 }
 
+// wsServe handles websocket connections.
 func wsServe(c echo.Context) error {
 	websocket.Handler(func(ws *websocket.Conn) {
 		defer ws.Close()
@@ -182,6 +184,7 @@ func wsServe(c echo.Context) error {
 	return nil
 }
 
+// downloadTrack tries to download a given URL and saves the song to the database.
 func downloadTrack(c echo.Context) error {
 	// yt-dlp \
 	// --no-wait-for-video \
