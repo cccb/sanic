@@ -33,6 +33,7 @@ const tab_browser = document.getElementById("tab-browser");
 const tab_search = document.getElementById("tab-search");
 const tab_playlists = document.getElementById("tab-playlists");
 const control_playlist_list = document.getElementById("control-playlist-list");
+const control_refresh_playlists = document.getElementById("control-refresh-playlists");
 const control_replace_playlist = document.getElementById("control-replace-playlist");
 const control_attach_playlist = document.getElementById("control-attach-playlist");
 const control_save_playlist = document.getElementById("control-save-playlist");
@@ -83,9 +84,7 @@ refreshPlaylists = () => {
         option.value = p["playlist"];
         option.addEventListener("click", () => {
           fetch(`${API_URL}/playlists/${p["playlist"]}`).then(async r => {
-            if (r.status === 200) {
-              fillResultTable(await r.json());
-            }
+            if (r.status === 200) fillResultTable(await r.json());
           })
         });
         control_playlist_list.appendChild(option)
@@ -170,6 +169,10 @@ control_search_submit.addEventListener("click", event => {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
   })
+});
+
+control_refresh_playlists.addEventListener("click", () => {
+  refreshPlaylists();
 });
 
 control_replace_playlist.addEventListener("click", () => {
