@@ -11,6 +11,7 @@ import (
 
 // MPD API calls
 
+// updateDb Updates the music database: find new files, remove deleted files, update modified files.
 func updateDb(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -27,6 +28,7 @@ func updateDb(c echo.Context) error {
 	return c.String(http.StatusOK, fmt.Sprintf("Database update started with job id %d", jobId))
 }
 
+// previousTrack Plays previous song in the queue.
 func previousTrack(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -43,6 +45,7 @@ func previousTrack(c echo.Context) error {
 	return c.String(http.StatusOK, "Playing previous track in queue")
 }
 
+// nextTrack Plays next song in the queue.
 func nextTrack(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -59,6 +62,7 @@ func nextTrack(c echo.Context) error {
 	return c.String(http.StatusOK, "PLaying next track in queue")
 }
 
+// stopPlayback Stops playing.
 func stopPlayback(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -75,6 +79,7 @@ func stopPlayback(c echo.Context) error {
 	return c.String(http.StatusOK, "Playback stopped")
 }
 
+// resumePlayback Begins playing the playlist or if paused resumes playback.
 func resumePlayback(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -102,6 +107,7 @@ func resumePlayback(c echo.Context) error {
 	return c.String(http.StatusOK, "Playback resumed")
 }
 
+// pausePlayback Pauses playback.
 func pausePlayback(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -118,6 +124,7 @@ func pausePlayback(c echo.Context) error {
 	return c.String(http.StatusOK, "Playback paused")
 }
 
+// seek Seeks to the position defined by seconds within the current song.
 func seek(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -144,6 +151,7 @@ func seek(c echo.Context) error {
 	return c.String(http.StatusOK, fmt.Sprintf("Seeked current track to %d seconds", seconds))
 }
 
+// toggleRepeat Toggles repeat state between 1 or 0.
 func toggleRepeat(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -171,6 +179,7 @@ func toggleRepeat(c echo.Context) error {
 	return c.String(http.StatusOK, msg)
 }
 
+// toggleRandom Toggles random state between 1 or 0.
 func toggleRandom(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -198,6 +207,7 @@ func toggleRandom(c echo.Context) error {
 	return c.String(http.StatusOK, msg)
 }
 
+// setVolume Sets volume to level, the range of volume is 0-100.
 func setVolume(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -225,6 +235,7 @@ func setVolume(c echo.Context) error {
 
 // Queue
 
+// deleteTrackFromQueue removed track with song_id from queue
 func deleteTrackFromQueue(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -247,6 +258,7 @@ func deleteTrackFromQueue(c echo.Context) error {
 	return c.String(http.StatusOK, fmt.Sprintf("Removed song %d from queue", songId))
 }
 
+// moveTrackInQueue moves song with song_id to the new place position in the queue.
 func moveTrackInQueue(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -274,6 +286,7 @@ func moveTrackInQueue(c echo.Context) error {
 	return c.String(http.StatusOK, fmt.Sprintf("Moved song %d to position %d", songId, position))
 }
 
+// attachPlaylist adds the playlist with the name playlist_name to the queue.
 func attachPlaylist(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -293,6 +306,7 @@ func attachPlaylist(c echo.Context) error {
 	return c.JSON(http.StatusOK, "")
 }
 
+// replaceQueue replaces the current queue with  the playlist with the name playlist_name.
 func replaceQueue(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -319,6 +333,7 @@ func replaceQueue(c echo.Context) error {
 
 // Playlists
 
+// listPlaylists return a list of all stored playlists.
 func listPlaylists(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -336,6 +351,7 @@ func listPlaylists(c echo.Context) error {
 	return c.JSON(http.StatusOK, playlists)
 }
 
+// listPlaylist returns the contents of the playlist defined by name.
 func listPlaylist(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -355,6 +371,7 @@ func listPlaylist(c echo.Context) error {
 	return c.JSON(http.StatusOK, playlist)
 }
 
+// deletePlaylist deletes the playlist defined by name.
 func deletePlaylist(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -374,6 +391,7 @@ func deletePlaylist(c echo.Context) error {
 	return c.String(http.StatusNoContent, "")
 }
 
+// savePlaylist saves the current queue to a playlist with the given name.
 func savePlaylist(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
@@ -393,6 +411,7 @@ func savePlaylist(c echo.Context) error {
 	return c.String(http.StatusCreated, "")
 }
 
+// searchDatabase search the database path given by pattern and returns all entries that contain the pattern either in their artist, album or title.
 func searchDatabase(c echo.Context) error {
 	// Connect to MPD server
 	conn, err := mpd.Dial("tcp", "localhost:6600")
