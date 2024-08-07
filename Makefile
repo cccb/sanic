@@ -6,6 +6,7 @@ PROJECT := sanic
 
 mpd:  ## Run mpd test instance
 	mkdir -p /tmp/${PROJECT}/{music,playlists}
+	cp *.mp3 /tmp/${PROJECT}/music/
 	touch /tmp/${PROJECT}/mpd_db
 	mpd --no-daemon ./mpd.conf
 
@@ -17,7 +18,7 @@ build:  ## Compile project
 
 update:  ## Update go dependencies
 	go get -u
-	which gomod2nix && gomod2nix
+	which gomod2nix && gomod2nix  # sync go deps with nix
 
 tidy:  ## Add missing and remove unused modules
 	go mod tidy

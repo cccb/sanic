@@ -1,19 +1,14 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"github.com/fhs/gompd/v2/mpd"
 	"github.com/labstack/echo-contrib/echoprometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"golang.org/x/net/websocket"
 	"gopkg.in/ini.v1"
-	"log"
 	"net/http"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 // Config holds the configuration for the mpd connection and for the web server.
@@ -78,6 +73,21 @@ func main() {
 		return c.File("index.html")
 	})
 
+	// echo back request to check if HTTP/2 works etc
+	e.GET("/echo", func(c echo.Context) error {
+		req := c.Request()
+		format := `
+<code>
+    Protocol: %s<br>
+    Host: %s<br>
+    Remote Address: %s<br>
+    Method: %s<br>
+    Path: %s<br>
+</code>
+`
+		return c.HTML(http.StatusOK, fmt.Sprintf(format, req.Proto, req.Host, req.RemoteAddr, req.Method, req.URL.Path))
+	})
+
 	g := e.Group("/api")
 	g.GET("/update_db", updateDb)
 	g.GET("/previous_track", previousTrack)
@@ -104,7 +114,7 @@ func main() {
 
 	g.GET("/download", downloadTrack)
 
-	e.GET("/ws", wsServe)
+	e.GET("/sse", serveSSE)
 
 	if config.UI.Tls {
 		e.Logger.Fatal(e.StartTLS(fmt.Sprintf("%s:%d", config.UI.Hostname, config.UI.Port), config.UI.Certificate, config.UI.Key))
@@ -113,90 +123,8 @@ func main() {
 	}
 }
 
-// wsServe handles websocket connections.
-func wsServe(c echo.Context) error {
-	websocket.Handler(func(ws *websocket.Conn) {
-		defer ws.Close()
-
-		// Connect to MPD server
-		mpdConn, err := mpd.Dial("tcp", "localhost:6600")
-		if err != nil {
-			//log.Fatalln(err)
-			c.Logger().Error(err)
-			err = websocket.Message.Send(ws, fmt.Sprintf("{\"mpd_error\":\"%s\"}", err.Error()))
-			if err != nil {
-				c.Logger().Error(err)
-			}
-		}
-		defer mpdConn.Close()
-
-		for {
-			// Read
-			msg := ""
-			err := websocket.Message.Receive(ws, &msg)
-			if err != nil {
-				c.Logger().Error(err)
-				break
-			} else {
-				// log.Print(msg)
-				if strings.ToLower(msg) == "#status" {
-					status, err := mpdConn.Status()
-					if err != nil {
-						c.Logger().Error(err)
-					}
-					currentsong, err := mpdConn.CurrentSong()
-					if err != nil {
-						c.Logger().Error(err)
-					}
-					queue, err := mpdConn.PlaylistInfo(-1, -1)
-					if err != nil {
-						c.Logger().Error(err)
-					}
-					jsonStatus, err := json.Marshal(status)
-					if err != nil {
-						c.Logger().Error(err)
-					}
-					jsonCurrentSong, err := json.Marshal(currentsong)
-					if err != nil {
-						c.Logger().Error(err)
-					}
-					jsonQueue, err := json.Marshal(queue)
-					if err != nil {
-						c.Logger().Error(err)
-					}
-					err = websocket.Message.Send(ws, fmt.Sprintf("{\"mpd_status\":%s,\"mpd_current_song\":%s,\"mpd_queue\":%s}", string(jsonStatus), string(jsonCurrentSong), string(jsonQueue)))
-					if err != nil {
-						c.Logger().Error(err)
-					}
-
-				} else if strings.HasPrefix(strings.ToLower(msg), "#download ") {
-					// Download video link as audio file
-					uri := strings.SplitN(msg, " ", 2)[1]
-					// TODO: implement yt-dlp integration
-					err := websocket.Message.Send(ws, fmt.Sprintf("Downloading %s", uri))
-					if err != nil {
-						c.Logger().Error(err)
-					}
-				}
-			}
-		}
-	}).ServeHTTP(c.Response(), c.Request())
-	return nil
-}
-
 // downloadTrack tries to download a given URL and saves the song to the database.
 func downloadTrack(c echo.Context) error {
-	// yt-dlp \
-	// --no-wait-for-video \
-	// --no-playlist \
-	// --windows-filenames \
-	// --newline \
-	// --extract-audio \
-	// --audio-format mp3 \
-	// --audio-quality 0 \
-	// -f bestaudio/best \
-	// ${video_url}
-
 	cmd := exec.Command(
 		"yt-dlp",
 		"--no-wait-for-video",
@@ -212,7 +140,7 @@ func downloadTrack(c echo.Context) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		log.Fatalln(err)
+		c.Logger().Fatal(err)
 	}
 
 	return c.String(http.StatusAccepted, "")

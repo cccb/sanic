@@ -392,7 +392,27 @@ control_volume.addEventListener("change", event => {
   });
 });
 
+// Server-Sent-Events
+
+if (typeof (EventSource) !== "undefined") {
+  const sse = new EventSource("/sse");
+  sse.addEventListener("status", (event) => {
+    const status = JSON.parse(event.data);
+    console.log("test: " + event.data);
+
+    connection_state.innerHTML = "&#x274C; Disconnected";  // ✅ Check Mark Button
+  });
+
+  sse.onmessage = function (event) {
+    console.log("sse message: " + event.data);
+  };
+} else {
+  console.log("Sorry, your browser does not support server-sent events...");
+}
+
 // Websocket logic
+
+/*
 
 // Create WebSocket connection.
 const socket = new WebSocket(`${document.location.protocol === "https:" ? "wss" : "ws"}://${document.location.host}/ws`);
@@ -409,9 +429,9 @@ socket.addEventListener("message", event => {
 
   const msg = JSON.parse(event.data);
 
-  if ("mpd_status" in msg) {
+  if ("status" in msg) {
     if (msg.mpd_status == null) {
-      connection_state.innerHTML = "&#x274C; Disconnected";  // ✅ Check Mark Button
+
     } else {
       // print error if present
       if ("error" in msg.mpd_status) {
@@ -480,7 +500,7 @@ socket.addEventListener("message", event => {
   }
 
   // update song info
-  if ("mpd_current_song" in msg && msg.mpd_current_song != null) {
+  if ("current_song" in msg && msg.mpd_current_song != null) {
     let track;
     if ("Artist" in msg.mpd_current_song && "Title" in msg.mpd_current_song) {
       track = `${msg.mpd_current_song.Artist} - ${msg.mpd_current_song.Title}`
@@ -493,7 +513,7 @@ socket.addEventListener("message", event => {
   }
 
   // update queue
-  if ("mpd_queue" in msg && msg.mpd_queue != null) {
+  if ("queue" in msg && msg.mpd_queue != null) {
     const tbody = document.createElement("tbody");
     msg.mpd_queue.forEach(song => {
       const tr = document.createElement("tr");
@@ -557,7 +577,7 @@ socket.addEventListener("message", event => {
     }
   }
 
-  if ("mpd_error" in msg) {
+  if ("error" in msg) {
     console.error(`MPD Error: ${msg.mpd_error}`)
   }
 });
@@ -572,3 +592,4 @@ window.setInterval(() => {
   }
 }, 1000);
 
+*/

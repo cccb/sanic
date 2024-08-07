@@ -28,7 +28,7 @@ Example flake setup (untested):
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     sanic = {
-      url = "git.berlin.ccc.de/cccb/sanic";
+      url = "gitlab.com/XenGi/sanic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -52,8 +52,16 @@ Example flake setup (untested):
 
 Install from the AUR:
 
-```
+```shell
 yay -S sanic
+```
+
+### Podman
+
+Run as daemon:
+
+```shell
+podman run -d -v ./config.ini:/config.ini -p 8443:8443 registry.gitlab.com/XenGi/sanic:latest
 ```
 
 ## 🛠️ Development
