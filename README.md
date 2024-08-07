@@ -56,12 +56,12 @@ Install from the AUR:
 yay -S sanic
 ```
 
-### Podman
+### 🐳 Container
 
 Run as daemon:
 
 ```shell
-podman run -d -v ./config.ini:/config.ini -p 8443:8443 registry.gitlab.com/XenGi/sanic:latest
+podman run -d -v ./config.ini:/config.ini -p 8080:8080 registry.gitlab.com/XenGi/sanic:latest
 ```
 
 ## 🛠️ Development
@@ -70,7 +70,7 @@ sanic is developed using [Nix][nix], but you can also just use the usual Golang 
 
 Run local [MPD][mpd] instance for testing with `make mpd`.
 
-Update go depdendencies like this:
+Update go dependencies like this:
 
 ```shell
 go get -u  # or `make update`
@@ -94,7 +94,7 @@ nix build
 
 ### 🐧 w/o Nix
 
-Use these Make targets for convenience:
+Use these Make targets for your convenience:
 
 - `run`: Run project
 - `build`: Compile project

@@ -1,17 +1,12 @@
 FROM docker.io/golang:1.22 as builder
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY . ./
-RUN go mod download
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /sanic
-
-# -----
-
-FROM builder AS tester
-
-RUN go test -v ./...
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -v -o sanic ./...
 
 # -----
 
@@ -19,8 +14,8 @@ FROM scratch as runner
 
 WORKDIR /
 
-COPY --from=builder /sanic /sanic
-COPY --from=builder /app/static /static
+COPY --from=builder /usr/src/app/sanic /sanic
+COPY --from=builder /usr/src/app/static /static
 
 EXPOSE 8080
 

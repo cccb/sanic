@@ -1,0 +1,27 @@
+[Unit]
+Description=sanic - chaos music control
+
+[Container]
+AutoUpdate=registry
+ContainerName=sanic
+Group=sanic
+HealthCmd=/usr/bin/curl localhost:8080/echo
+HealthInterval=2m
+HealthOnFailure=restart
+HealthRetries=5
+HealthStartPeriod=1m
+Image=registry.gitlab.com/xengi/sanic/sanic:latest
+LogDriver=journald
+Network=host
+NoNewPrivileges=true
+PublishPort=8080
+Pull=always
+User=sanic
+Volume=/etc/sanic/config.ini:/config.ini
+
+[Service}
+Restart=always
+
+[Install]
+WantedBy=default.target
+
