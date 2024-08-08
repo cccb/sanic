@@ -114,7 +114,7 @@ You can run sanic in a container. Use these Make targets for convenience:
 
 ## 🗺️ Architecture
 
-[![Architecture](https://git.berlin.ccc.de/cccb/sanic/raw/branch/main/architecture.drawio.svg)](https://app.diagrams.net/?mode=git.berlin.ccc.de#Hcccb%2Fsanic%2Fmain%2Farchitecture.drawio.svg)
+[![Architecture](https://gitlab.com/XenGi/sanic/-/raw/main/architecture.drawio.svg)](https://app.diagrams.net/?mode=gitlab.com#AXenGi%2Fsanic%2Fmain%2Farchitecture.drawio.svg)
 
 ---
 
