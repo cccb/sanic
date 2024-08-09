@@ -100,6 +100,7 @@ func serveSSE(c echo.Context) error {
 			return err
 		}
 		w.Flush()
+		return nil
 	}
 	defer mpdConn.Close()
 
@@ -125,6 +126,7 @@ func serveSSE(c echo.Context) error {
 			if err != nil {
 				c.Logger().Error(err)
 			}
+			//c.Logger().Print("status " + string(jsonStatus))
 			// Only send new event if different from last time
 			if !bytes.Equal(jsonStatus, lastJsonStatus) {
 				statusEvent := Event{
@@ -145,10 +147,11 @@ func serveSSE(c echo.Context) error {
 			if err != nil {
 				c.Logger().Error(err)
 			}
+			//c.Logger().Print("current_song " + string(jsonCurrentSong))
 			// Only send new event if different from last time
 			if !bytes.Equal(jsonCurrentSong, lastJsonCurrentSong) {
 				currentSongEvent := Event{
-					Event: []byte("status"),
+					Event: []byte("currentsong"),
 					Data:  []byte(string(jsonCurrentSong)),
 				}
 				if err := currentSongEvent.MarshalTo(w); err != nil {
@@ -165,10 +168,11 @@ func serveSSE(c echo.Context) error {
 			if err != nil {
 				c.Logger().Error(err)
 			}
+			//c.Logger().Print("queue " + string(jsonQueue))
 			// Only send new event if different from last time
 			if !bytes.Equal(jsonQueue, lastJsonQueue) {
 				queueEvent := Event{
-					Event: []byte("status"),
+					Event: []byte("queue"),
 					Data:  []byte(string(jsonQueue)),
 				}
 				if err := queueEvent.MarshalTo(w); err != nil {

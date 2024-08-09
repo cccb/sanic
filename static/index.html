@@ -24,7 +24,7 @@
     <div id="control-admin">
       <button id="connection-state">&#x274C; Disconnected</button> <!-- ❌ Cross Mark -->
       <button>Config</button>
-      <button id="control-update-db" disabled="disabled"><span class="loader"></span> Update DB</button>
+      <button id="control-update-db" data-jobid="" disabled="disabled"><span class="loader"></span> Update DB</button>
     </div><!--/#control-admin-->
     <div>
       <div class="spaced">
@@ -61,7 +61,7 @@
       <div>
         <label for="control-track">Now playing:</label>
         <!--<input type="text" id="control-track" name="track" disabled="disabled" />-->
-        <div class="marquee" id="control-track">
+        <div class="marquee" id="control-track" data-songid="">
           <span></span>
         </div>
       </div>
@@ -226,5 +226,6 @@
   </footer>
 </main>
 <script src="index.js"></script>
+<script src="sse.js"></script>
 </body>
 </html>

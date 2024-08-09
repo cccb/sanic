@@ -9,7 +9,6 @@ const dialog_save_playlist = document.getElementById("save-playlist");
 const control_playlist_name = document.getElementById("control-playlist-name");
 const dialog_save_playlist_submit = document.querySelector("#save-playlist form button");
 const dialog_save_playlist_close = document.querySelector("#save-playlist .close");
-
 const connection_state = document.getElementById("connection-state");
 const control_update_db = document.getElementById("control-update-db");
 const control_previous = document.getElementById("control-previous");
@@ -137,6 +136,7 @@ tab_search.addEventListener("click", () => {
 });
 
 tab_playlists.addEventListener("click", () => {
+  refreshPlaylists();
   if (!tab_playlists.classList.contains("active")) {
     tab_browser.classList.remove("active");
     tab_search.classList.remove("active")
@@ -215,48 +215,16 @@ control_delete_playlist.addEventListener("click", () => {
   });
 });
 
-tab_browser.addEventListener("click", () => {
-  if (!tab_browser.classList.contains("active")) {
-    tab_browser.classList.add("active");
-    tab_search.classList.remove("active")
-    tab_playlists.classList.remove("active")
-    document.getElementById("file-browser").style.display = "block";
-    document.getElementById("search").style.display = "none";
-    document.getElementById("playlist-browser").style.display = "none";
-  }
-});
-
-tab_search.addEventListener("click", () => {
-  if (!tab_search.classList.contains("active")) {
-    tab_browser.classList.remove("active");
-    tab_search.classList.add("active")
-    tab_playlists.classList.remove("active")
-    document.getElementById("file-browser").style.display = "none";
-    document.getElementById("search").style.display = "block";
-    document.getElementById("playlist-browser").style.display = "none";
-  }
-});
-
-tab_playlists.addEventListener("click", () => {
-  refreshPlaylists();
-  if (!tab_playlists.classList.contains("active")) {
-    tab_browser.classList.remove("active");
-    tab_search.classList.remove("active")
-    tab_playlists.classList.add("active")
-    document.getElementById("file-browser").style.display = "none";
-    document.getElementById("search").style.display = "none";
-    document.getElementById("playlist-browser").style.display = "block";
-  }
-});
-
 // Add API calls to controls
 
-control_update_db.addEventListener("click", () => {
-  console.log("Issuing database update")
+control_update_db.addEventListener("click", (event) => {
+  console.log("Issuing database update");
   fetch(`${API_URL}/update_db`).then(async r => {
     if (r.status === 200) {
+      // const idText = await r.text();
       console.log(await r.text());
-      event.target.disabled = true;
+      // event.target.dataset.jobid = idText.split(" ").pop();
+      // event.target.disabled = true;
     } else {
       console.error(`API returned ${r.status}: ${r.statusText}`);
     }
@@ -391,205 +359,3 @@ control_volume.addEventListener("change", event => {
     }
   });
 });
-
-// Server-Sent-Events
-
-if (typeof (EventSource) !== "undefined") {
-  const sse = new EventSource("/sse");
-  sse.addEventListener("status", (event) => {
-    const status = JSON.parse(event.data);
-    console.log("test: " + event.data);
-
-    connection_state.innerHTML = "&#x274C; Disconnected";  // ✅ Check Mark Button
-  });
-
-  sse.onmessage = function (event) {
-    console.log("sse message: " + event.data);
-  };
-} else {
-  console.log("Sorry, your browser does not support server-sent events...");
-}
-
-// Websocket logic
-
-/*
-
-// Create WebSocket connection.
-const socket = new WebSocket(`${document.location.protocol === "https:" ? "wss" : "ws"}://${document.location.host}/ws`);
-
-// Connection opened
-socket.addEventListener("open", () => {
-  socket.send("Hello Server!");
-});
-
-// Listen for messages and update UI state
-socket.addEventListener("message", event => {
-  // Print out mpd response
-  console.log(`DEBUG: ${event.data}`);  // DEBUG
-
-  const msg = JSON.parse(event.data);
-
-  if ("status" in msg) {
-    if (msg.mpd_status == null) {
-
-    } else {
-      // print error if present
-      if ("error" in msg.mpd_status) {
-        console.error(msg.mpd_status.error);
-      }
-
-      // update "Update DB" button
-      if ("updating_db" in msg.mpd_status) {
-        control_update_db.disabled = true;
-      } else {
-        if (control_update_db.disabled) {
-          console.log("Database update done.")
-        }
-        control_update_db.disabled = false;
-      }
-
-      // update play/pause button
-      if ("state" in msg.mpd_status && msg.mpd_status.state !== "play") {  // TODO: only update DOM if necessary
-        control_play_pause.innerHTML = "&#x23F5;&#xFE0E;";  // Play
-      } else {
-        control_play_pause.innerHTML = "&#x23F8;&#xFE0E;";  // Pause
-      }
-
-      // update playback time
-      if ("time" in msg.mpd_status) {
-        const [elapsed, duration] = msg.mpd_status.time.split(":", 2)
-        control_progress.value = elapsed;
-        control_progress.max = duration;
-        // triggers the update of control_time element
-        const e = new Event("input");
-        control_progress.dispatchEvent(e);
-      }
-
-      // update repeat state
-      if ("repeat" in msg.mpd_status) {
-        if (msg.mpd_status.repeat === "1") {
-          control_repeat.innerHTML = "&#x1F534; repeat"; // 🔴 Red Circle
-          control_repeat.dataset.state = "on";
-        } else {
-          control_repeat.innerHTML = "&#x1F518; repeat"; // 🔘 Radio Button
-          control_repeat.dataset.state = "off";
-        }
-      }
-
-      // update shuffle state
-      if ("random" in msg.mpd_status) {
-        if (msg.mpd_status.random === "1") {
-          control_shuffle.innerHTML = "&#x1F534; shuffle"; // 🔴 Red Circle
-          control_shuffle.dataset.state = "on";
-        } else {
-          control_shuffle.innerHTML = "&#x1F518; shuffle"; // 🔘 Radio Button
-          control_shuffle.dataset.state = "off";
-        }
-      }
-
-      // update crossfade state
-      if ("xfade" in msg.mpd_status) {
-        control_xfade.value = msg.mpd_status.xfade;
-      }
-
-      // update volume
-      if ("volume" in msg.mpd_status) {
-        control_volume.value = msg.mpd_status.volume;
-      }
-    }
-  }
-
-  // update song info
-  if ("current_song" in msg && msg.mpd_current_song != null) {
-    let track;
-    if ("Artist" in msg.mpd_current_song && "Title" in msg.mpd_current_song) {
-      track = `${msg.mpd_current_song.Artist} - ${msg.mpd_current_song.Title}`
-    } else {
-      track = msg.mpd_current_song.file;
-    }
-    if (control_track.innerHTML !== `<span>${track}</span>`) {
-      control_track.innerHTML = `<span>${track}</span>`;
-    }
-  }
-
-  // update queue
-  if ("queue" in msg && msg.mpd_queue != null) {
-    const tbody = document.createElement("tbody");
-    msg.mpd_queue.forEach(song => {
-      const tr = document.createElement("tr");
-      tr.dataset.song_id = song.Id;
-      if ("songid" in msg.mpd_status && msg.mpd_status.songid === song.Id) {
-        tr.classList.add("playing");
-      }
-      const pos = document.createElement("td");
-      pos.innerText = song.Pos;
-      const artist = document.createElement("td");
-      if ("Artist" in song) {
-        artist.innerText = song.Artist;
-      }
-      const track = document.createElement("td");
-      if ("Title" in song) {
-        track.innerText = song.Title;
-      } else {
-        track.innerText = song.file;
-      }
-      const album = document.createElement("td");
-      // TODO: Do songs have album info attached to them?
-      album.innerText = "";
-      const length = document.createElement("td");
-      length.innerText = secondsToTrackTime(song.duration);
-      const actions = document.createElement("td");
-      const moveUp = document.createElement("button");
-      moveUp.classList.add("borderless");
-      if (parseInt(song.Pos) !== 0) {
-        moveUp.innerHTML = "&#x1F53A;"; // 🔺 Red Triangle Pointed Down
-        moveUp.addEventListener("click", event => { moveTrackInQueue(event, -1) });
-      } else {
-        moveUp.innerHTML = "&emsp;";
-      }
-      const moveDown = document.createElement("button");
-      moveDown.classList.add("borderless");
-      if (parseInt(song.Pos) !== msg.mpd_queue.length - 1) {
-        moveDown.innerHTML = "&#x1F53B;"; // 🔻 Red Triangle Pointed Up
-        moveDown.addEventListener("click", event => {moveTrackInQueue(event, 1)});
-      } else {
-        moveDown.innerHTML = "&emsp;";
-      }
-      const remove = document.createElement("button");
-      remove.classList.add("borderless");
-      remove.innerHTML = "&#x274C;"; // ❌ Cross mark
-      remove.addEventListener("click", removeTrackFromQueue);
-      actions.appendChild(moveUp);
-      actions.appendChild(moveDown);
-      actions.appendChild(remove);
-      tr.appendChild(pos);
-      tr.appendChild(artist);
-      tr.appendChild(track);
-      tr.appendChild(album);
-      tr.appendChild(length);
-      tr.appendChild(actions);
-      tbody.appendChild(tr);
-    });
-    const currentQueue = document.querySelector("#queue tbody")
-    if (currentQueue.innerHTML !== tbody.innerHTML) {
-      console.log("Updating queue")
-      currentQueue.outerHTML = tbody.outerHTML;
-    }
-  }
-
-  if ("error" in msg) {
-    console.error(`MPD Error: ${msg.mpd_error}`)
-  }
-});
-
-// Request MPD status every second
-window.setInterval(() => {
-  if (socket.readyState === socket.OPEN) {
-    socket.send("#status");
-    connection_state.innerHTML = "&#x2705; Connected";  // ✅ Check Mark Button
-  } else {
-    connection_state.innerHTML = "&#x274C; Disconnected";  // ❌ Cross Mark
-  }
-}, 1000);
-
-*/
