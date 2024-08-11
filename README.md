@@ -26,9 +26,9 @@ Example flake setup (untested):
 {
   description = "Example Flake to install sanic on your host";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-24.05;
     sanic = {
-      url = "gitlab.com/XenGi/sanic";
+      url = gitlab:XenGi/sanic/main;
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
