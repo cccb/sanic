@@ -51,11 +51,16 @@
           host=${cfg.backend.host}
           port=${cfg.backend.port}
         '';
-        execCommand = "${pkgs.sanic}/bin/sanic -c '${configFile}'";
+        execCommand = "${cfg.package}/bin/sanic -c '${configFile}'";
       in
       {
         options.services.sanic = {
           enable = lib.mkEnableOption "Enables the sanic systemd service.";
+          package = lib.mkOption {
+            description = "Package to use.";
+            type = lib.types.package;
+            default = sanic;
+          };
           ui = lib.mkOption {
             description = "Setting for HTTP(S) UI.";
             example = lib.literalExpression ''
