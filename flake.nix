@@ -42,14 +42,14 @@
         configFile = pkgs.writeText "config.ini" ''
           [ui]
           host=${cfg.ui.host}
-          port=${cfg.ui.port}
-          tls=${cfg.ui.tls}
+          port=${toString cfg.ui.port}
+          tls=${if cfg.ui.tls then "true" else "false"}
           certificate=${cfg.ui.certificate}
           key=${cfg.ui.key}
 
           [mpd]
           host=${cfg.backend.host}
-          port=${cfg.backend.port}
+          port=${toString cfg.backend.port}
         '';
         execCommand = "${cfg.package}/bin/sanic -c '${configFile}'";
       in
