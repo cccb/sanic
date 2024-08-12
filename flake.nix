@@ -44,8 +44,8 @@
           host=${cfg.ui.host}
           port=${toString cfg.ui.port}
           tls=${if cfg.ui.tls then "true" else "false"}
-          certificate=${cfg.ui.certificate}
-          key=${cfg.ui.key}
+          certificate=${toString cfg.ui.certificate}
+          key=${toString cfg.ui.key}
 
           [mpd]
           host=${cfg.backend.host}
