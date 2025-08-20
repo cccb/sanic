@@ -41,7 +41,19 @@ Example flake setup (untested):
     nixosConfigurations."myhostname".nixpkgs.lib.nixosSystem = {
       inherit system;
       modules = [
-        { environment.systemPackages = [ sanic.packages.${system}.default ]; }
+        { sanic.nixosModules.default }
+        { services.sanic = {
+            ui = {
+              host = "[::1]";
+              port = 8080;
+              tls = false;
+            };
+            backend = {
+              host = "localhost";
+              port = 6600;
+            };
+          };
+        }
       ];
     };
   };
@@ -125,3 +137,4 @@ Made with ❤️ and ![golang logo][golang].
 [golang]: https://go.dev/images/favicon-gopher.svg
 [mpd]: https://musicpd.org/
 [mpc]: https://www.musicpd.org/clients/mpc/
+

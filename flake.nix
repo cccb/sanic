@@ -33,6 +33,7 @@
         packages = with pkgs; [
           mpd
           mpc-cli
+          mkcert
         ];
       };
       packages.default = sanic;

@@ -1,4 +1,4 @@
-FROM docker.io/golang:1.22 as builder
+FROM docker.io/golang:alpine as builder
 
 WORKDIR /usr/src/app
 
@@ -18,5 +18,6 @@ COPY --from=builder /usr/src/app/sanic /sanic
 COPY --from=builder /usr/src/app/static /static
 
 EXPOSE 8080
+EXPOSE 8443
 
 ENTRYPOINT ["/sanic"]

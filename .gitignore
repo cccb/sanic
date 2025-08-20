@@ -1,8 +1,7 @@
 sanic
 result
 # self-signed certs for testing
-cert.pem
-key.pem
+*.pem
 # test files
 *.mp3
 

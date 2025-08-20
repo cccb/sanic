@@ -10,6 +10,10 @@ mpd:  ## Run mpd test instance
 	touch /tmp/${PROJECT}/mpd_db
 	mpd --no-daemon ./mpd.conf
 
+.PHONY: tls
+tls: localhost+2.pem localhost+2-key.pem  ## Create certificate and key for HTTPS
+	mkcert -ecdsa localhost 127.0.0.1 ::1
+
 run: build  ## Run project
 	./${PROJECT}
 
@@ -42,7 +46,13 @@ build-container:  ## Build container image
 	podman build --tag ${PROJECT}:latest .
 
 run-container: build-container  ## Run container image
-	podman run --rm --volume ./config.ini:/config.ini --publish-all ${PROJECT}:latest
+	podman run --rm \
+		--volume ./config.ini:/config.ini \
+		--volume ./localhost+2.pem:/localhost+2.pem \
+		--volume ./localhost+2-key.pem:/localhost+2-key.pem \
+		--publish 8080:8080 \
+		--publish 8443:8443 \
+		${PROJECT}:latest
 
 help: ## Display this help
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
