@@ -41,6 +41,7 @@ nix:test:
   stage: test
   image: nixos/nix
   script:
+    - echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
     - nix flake check --all-systems
 
 sast:
@@ -50,6 +51,7 @@ nix:build:
   stage: build
   image: nixos/nix
   script:
+    - echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
     - nix build
 
 go:build:
