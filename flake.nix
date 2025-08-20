@@ -39,18 +39,7 @@
       nixosModules.default = { config, lib, pkgs, options, ... }:
       let
         cfg = config.services.sanic;
-        configFile = pkgs.writeText "config.ini" ''
-          [ui]
-          host=${cfg.ui.host}
-          port=${toString cfg.ui.port}
-          tls=${if cfg.ui.tls then "true" else "false"}
-          certificate=${toString cfg.ui.certificate}
-          key=${toString cfg.ui.key}
-
-          [mpd]
-          host=${cfg.backend.host}
-          port=${toString cfg.backend.port}
-        '';
+        configFile = pkgs.writeText "config.ini" (pkgs.lib.generators.toINI {} cfg);
         execCommand = "${cfg.package}/bin/sanic -c '${configFile}'";
       in
       {
@@ -66,7 +55,7 @@
             example = lib.literalExpression ''
               {
                 host = "[::1]";
-                port = 443;
+                port = 8443;
                 tls = true;
                 certificate = "${config.security.acme.certs."sanic.example.com".directory}/fullchain.pem";
                 key = "${config.security.acme.certs."sanic.example.com".directory}/key.pem";
@@ -86,7 +75,7 @@
                 };
                 port = lib.mkOption {
                   type = lib.types.port;
-                  default = 80;
+                  default = 8080;
                   description = "Port to listen on.";
                 };
                 tls = lib.mkOption {

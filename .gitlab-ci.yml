@@ -22,25 +22,37 @@ stages:
   - build
   - release
 
-format:
+go:format:
   stage: test
   script:
     - go fmt $(go list ./...)
 
-vet:
+go:vet:
   stage: test
   script:
     - go vet $(go list ./...)
 
-test:
+go:test:
   stage: test
   script:
     - go test -race $(go list ./...)
 
+nix:test:
+  stage: test
+  image: nixos/nix
+  script:
+    - nix flake check --all-systems
+
 sast:
   stage: test
 
-compile:
+nix:build:
+  stage: build
+  image: nixos/nix
+  script:
+    - nix build
+
+go:build:
   stage: build
   script:
     - mkdir -p bin
@@ -49,7 +61,7 @@ compile:
     paths:
       - bin
 
-build:
+docker:build:
   stage: build
   image: docker:stable
   services:
@@ -71,3 +83,4 @@ release:
     - docker push $CONTAINER_RELEASE_IMAGE
   only:
     - main
+
