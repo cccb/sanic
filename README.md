@@ -1,5 +1,6 @@
-[![maintained](https://img.shields.io/maintenance/yes/2024?style=flat-square)]()
-![Gitea Release](https://img.shields.io/gitea/v/release/cccb/sanic?gitea_url=https%3A%2F%2Fgit.berlin.ccc.de&sort=semver&display_name=release&style=flat-square)
+[![maintained](https://img.shields.io/maintenance/yes/2025?style=flat-square)]()
+[![AUR Version](https://img.shields.io/aur/version/sanic?style=flat-square&logo=archlinux) ![AUR Last Modified](https://img.shields.io/aur/last-modified/sanic?style=flat-square&logo=archlinux)](https://aur.archlinux.org/packages/sanic)
+![GitLab Release](https://img.shields.io/gitlab/v/release/xengi%2Fsanic?style=flat-square&logo=gitlab)
 
 
 # 🦔 sanic
