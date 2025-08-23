@@ -1,24 +1,29 @@
 package main
 
 import (
-	"fmt"
-	"github.com/labstack/echo-contrib/echoprometheus"
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"gopkg.in/ini.v1"
-	"net/http"
-	"os"
-	"os/exec"
+    "embed"
+    "fmt"
+    "net/http"
+    "os"
+    "os/exec"
+
+    "github.com/labstack/echo-contrib/echoprometheus"
+    "github.com/labstack/echo/v4"
+    "github.com/labstack/echo/v4/middleware"
+    "gopkg.in/ini.v1"
 )
 
-// Config holds the configuration for the mpd connection and for the web server.
+//go:embed static/*
+var staticFS embed.FS
+
+// Config holds the configuration for the mpd backend connection and for the web server.
 type Config struct {
-	MPD struct {
+	BACKEND struct {
 		Hostname string `ini:"hostname"`
 		Port     int    `ini:"port"`
 		Username string `ini:"username"`
 		Password string `ini:"password"`
-	} `ini:"mpd"`
+	} `ini:"backend"`
 	UI struct {
 		Hostname    string `ini:"hostname"`
 		Port        int    `ini:"port"`

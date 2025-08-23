@@ -1,11 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="application-name" content="Sanic">
+
+  <!-- seo data -->
+  <meta name="description" lang="en" content="chaos music control inspired by relaxx player">
+  <meta name="keywords" lang="en" content="music, playlist, mpd, ui">
+  <meta name="author" content="XenGi">
+  <link rel="canonical" href="https://gitlab.com/XenGi/sanic">
+
+  <!-- social media -->
+  <meta property="og:title" content="Sanic">
+  <meta property="og:description" content="chaos music control inspired by relaxx player">
+  <meta property="og:url" content="https://gitlab.com/XenGi/sanic">
+  <meta property="og:image" content="https://gitlab.com/XenGi/sanic/-/raw/main/static/img/sanic-logo.webp?ref_type=heads&inline=false">
+  <meta property="og:image:alt" content="Crappy picture of sonic the hedgehog">
+  <meta name="twitter:title" content="Sanic">
+  <meta name="twitter:description" content="chaos music control inspired by relaxx player">
+  <meta name="twitter:url" content="https://gitlab.com/XenGi/sanic">
+  <meta name="twitter:image:src" content="https://gitlab.com/XenGi/sanic/-/raw/main/static/img/sanic-logo.webp?ref_type=heads&inline=false">
+  <meta name="twitter:image:alt" content="Crappy picture of sonic the hedgehog">
+
+  <!-- icons and color -->
+  <meta name="theme-color" content="#000000">
+  <meta name="theme-scheme" content="dark">
+  <link rel="shortcut icon" href="/favicon.ico">
+
   <title>Sanic</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="treeview.css">
-  <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48 64x64" type="image/png">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/treeview.css">
 </head>
 <body>
 
@@ -17,7 +44,7 @@
     <input type="text" id="control-playlist-name" name="playlist-name" autofocus>
     <button>Save</button>
   </form>
-</dialog>
+</dialog><!--/#save-playlist-->
 
 <main>
   <div id="nav">
@@ -36,7 +63,7 @@
       <div class="spaced">
         <label for="control-progress"></label>
         <input type="range" id="control-progress" name="progress" min="0" step="1" />
-      </div>
+      </div><!--/.spaced-->
     </div>
     <div>
       <div class="spaced">
@@ -63,20 +90,20 @@
         <!--<input type="text" id="control-track" name="track" disabled="disabled" />-->
         <div class="marquee" id="control-track" data-songid="">
           <span></span>
-        </div>
+        </div><!--/#control-track /.marquee-->
       </div>
       <div>
         <label for="control-time">Time:</label>
         <input type="text" id="control-time" name="time" value="00:00:00/00:00:00" disabled="disabled" />
       </div>
-    </div>
+    </div><!--/.wide-->
     <div id="sanic-logo">
       <div><!-- TODO: try to remove this div -->
         <img alt="sanic logo" src="img/sanic-logo.webp" />
         Sanic &copy; 2023
       </div>
     </div><!--/#sanic-logo-->
-  </div>
+  </div><!--/#nav-->
   <div id="queue">
     <table>
       <thead>
@@ -179,7 +206,7 @@
               </li>
             </ul>
           </li>
-        </ul>
+        </ul><!--/#tree-->
       </div>
       <div>
         actions

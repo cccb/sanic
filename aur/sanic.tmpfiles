@@ -1,3 +1,0 @@
-d /etc/sanic 0750 sanic sanic
-d /run/sanic 0750 sanic sanic
-

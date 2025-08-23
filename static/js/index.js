@@ -157,7 +157,6 @@ dialog_save_playlist_close.addEventListener("click", () => {
   dialog_save_playlist.close()
 });
 
-
 // Add API calls to controls
 
 control_search_submit.addEventListener("click", event => {
@@ -214,8 +213,6 @@ control_delete_playlist.addEventListener("click", () => {
     }
   });
 });
-
-// Add API calls to controls
 
 control_update_db.addEventListener("click", (event) => {
   console.log("Issuing database update");

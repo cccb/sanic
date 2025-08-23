@@ -1,12 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"github.com/fhs/gompd/v2/mpd"
-	"github.com/labstack/echo/v4"
-	"net/http"
-	"strconv"
-	"time"
+    "fmt"
+    "net/http"
+    "strconv"
+    "time"
+
+    "github.com/fhs/gompd/v2/mpd"
+    "github.com/labstack/echo/v4"
 )
 
 // MPD API calls
