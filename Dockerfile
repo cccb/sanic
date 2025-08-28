@@ -15,7 +15,6 @@ FROM scratch as runner
 WORKDIR /
 
 COPY --from=builder /usr/src/app/sanic /sanic
-COPY --from=builder /usr/src/app/static /static
 
 EXPOSE 8080
 EXPOSE 8443
