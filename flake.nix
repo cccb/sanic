@@ -1,7 +1,7 @@
 {
   description = "sanic - chaos music control";
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/nixpkgs-unstable;
+    nixpkgs.url = github:NixOS/nixpkgs/eae238e32a7f2e508367158697fc47e06885156c; # go 1.25.0
     flake-utils.url = github:numtide/flake-utils;
     gomod2nix = {
       url = github:tweag/gomod2nix;

@@ -1,16 +1,16 @@
 package main
 
 import (
-    "embed"
-    "fmt"
-    "net/http"
-    "os"
-    "os/exec"
+	"embed"
+	"fmt"
+	"net/http"
+	"os"
+	"os/exec"
 
-    "github.com/labstack/echo-contrib/echoprometheus"
-    "github.com/labstack/echo/v4"
-    "github.com/labstack/echo/v4/middleware"
-    "gopkg.in/ini.v1"
+	"github.com/labstack/echo-contrib/echoprometheus"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"gopkg.in/ini.v1"
 )
 
 //go:embed static/*

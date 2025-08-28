@@ -1,14 +1,14 @@
 package main
 
 import (
-    "bytes"
-    "encoding/json"
-    "fmt"
-    "io"
-    "time"
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"time"
 
-    "github.com/fhs/gompd/v2/mpd"
-    "github.com/labstack/echo/v4"
+	"github.com/fhs/gompd/v2/mpd"
+	"github.com/labstack/echo/v4"
 )
 
 // Event represents Server-Sent Event.
