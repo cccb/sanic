@@ -1,7 +1,7 @@
 {
   description = "sanic - chaos music control";
   inputs = {
-    nixpkgs.url = github:NixOS/nixpkgs/eae238e32a7f2e508367158697fc47e06885156c; # go 1.25.0
+    nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable-small;
     flake-utils.url = github:numtide/flake-utils;
     gomod2nix = {
       url = github:tweag/gomod2nix;
@@ -21,8 +21,42 @@
         src = ./.;
         modules = ./gomod2nix.toml;
       };
+      go-test = pkgs.stdenvNoCC.mkDerivation {
+        name = "go-test";
+        dontBuild = true;
+        src = ./.;
+        doCheck = true;
+        nativeBuildInputs = with pkgs; [
+          go
+          writableTmpDirAsHomeHook
+        ];
+        checkPhase = ''
+          go test -v ./...
+        '';
+        installPhase = ''
+          mkdir "$out"
+        '';
+      };
+      go-lint = pkgs.stdenvNoCC.mkDerivation {
+        name = "go-lint";
+        dontBuild = true;
+        src = ./.;
+        doCheck = true;
+        nativeBuildInputs = with pkgs; [
+          golangci-lint
+          go
+          writableTmpDirAsHomeHook
+        ];
+        checkPhase = ''
+          golangci-lint run
+        '';
+        installPhase = ''
+          mkdir "$out"
+        '';
+      };
     in
     {
+      checks = { inherit go-test go-lint; };
       formatter = pkgs.nixpkgs-fmt;
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
@@ -36,7 +70,15 @@
           mkcert
         ];
       };
-      packages.default = sanic;
+      packages = {
+        default = sanic;
+        container = pkgs.dockerTools.buildImage {
+          name = "sanic";
+          config = {
+            Cmd = [ "${sanic}/bin/sanic" ];
+          };
+        };
+      };
       nixosModules.default = import ./option.nix;
     }
   );
