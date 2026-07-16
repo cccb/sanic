@@ -1,5 +1,6 @@
 sanic
 result
+.claude-env
 # self-signed certs for testing
 *.pem
 # test files
