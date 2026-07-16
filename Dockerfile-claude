@@ -1,0 +1,35 @@
+# Claude Code with pro subscription (Long-lived OAuth token) in a container
+# Use docker-compose-claude.yml to run
+
+FROM debian:bookworm-slim
+
+# Basic tooling Claude Code relies on (git for repo work, ripgrep for fast
+# search, plus curl/ca-certificates for the installer and API traffic)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        git \
+        ripgrep \
+        jq \
+        procps \
+    && rm -rf /var/lib/apt/lists/*
+
+# Run as a non-root user (recommended; Claude Code warns when run as root)
+RUN useradd -m -s /bin/bash claude
+USER claude
+WORKDIR /home/claude
+
+# Skip the first-run onboarding wizard, as it ignores CLAUDE_CODE_OAUTH_TOKEN
+# and forces a browser login (known bug).
+RUN echo '{"hasCompletedOnboarding": true, "theme": "dark"}' > /home/claude/.claude.json
+
+# Install Claude Code via the native installer (no Node.js needed)
+RUN curl -fsSL https://claude.ai/install.sh | bash
+
+# The installer puts the binary in ~/.local/bin
+ENV PATH="/home/claude/.local/bin:${PATH}"
+
+# Your project gets mounted here
+WORKDIR /workspace
+
+ENTRYPOINT ["claude"]

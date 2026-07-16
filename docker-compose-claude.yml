@@ -1,0 +1,20 @@
+# There must be a .claude-env file, where claude oauth token is present: CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-...
+# Run compose like this: docker compose -f docker-compose-claude.yml run --rm claude-code
+# Do NOT use docker compose up instead of run, or your console output will be glitched.
+
+services:
+  claude-code:
+    build: Dockerfile-claude
+    image: claude-code
+    env_file:
+      - .claude-env          # contains: CLAUDE_CODE_OAUTH_TOKEN=sk-ant-oat01-...
+    volumes:
+      - ./:/workspace        # your project (compose file's directory)
+      - ./claude-config:/home/claude/.claude   # persists settings/history
+    tmpfs:
+      - /workspace/.git:ro   # Shadow .git dir, to hide it from claude
+    working_dir: /workspace
+
+    stdin_open: true         # keep STDIN open (-i)
+    tty: true                # allocate a TTY (-t) — Claude Code is interactive
+
