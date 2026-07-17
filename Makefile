@@ -10,9 +10,11 @@ mpd:  ## Run mpd test instance
 	touch /tmp/${PROJECT}/mpd_db
 	mpd --no-daemon ./mpd.conf
 
+localhost+2.pem localhost+2-key.pem:
+	mkcert -ecdsa localhost 127.0.0.1 ::1
+
 .PHONY: tls
 tls: localhost+2.pem localhost+2-key.pem  ## Create certificate and key for HTTPS
-	mkcert -ecdsa localhost 127.0.0.1 ::1
 
 run: build  ## Run project
 	./${PROJECT}
