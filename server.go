@@ -68,7 +68,7 @@ func main() {
 			if err = pusher.Push("/style.css", nil); err != nil {
 				return
 			}
-			if err = pusher.Push("/index.js", nil); err != nil {
+			if err = pusher.Push("/js/index.js", nil); err != nil {
 				return
 			}
 			if err = pusher.Push("/favicon.ico", nil); err != nil {
