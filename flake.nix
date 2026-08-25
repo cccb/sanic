@@ -70,7 +70,7 @@
         ];
         packages = with pkgs; [
           mpd
-          mpc-cli
+          mpc
           mkcert
         ];
       };
