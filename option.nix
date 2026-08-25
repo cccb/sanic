@@ -11,7 +11,6 @@ in
     package = lib.mkOption {
       description = "Package to use.";
       type = lib.types.package;
-      default = sanic;
     };
     ui = lib.mkOption {
       description = "Setting for HTTP(S) UI.";
