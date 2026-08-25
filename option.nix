@@ -1,8 +1,14 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.sanic;
-  configFile = pkgs.writeText "config.ini" (pkgs.lib.generators.toINI {} cfg);
+  configFile = pkgs.writeText "config.ini" (pkgs.lib.generators.toINI { } cfg);
   execCommand = "${cfg.package}/bin/sanic -c '${configFile}'";
 in
 {
@@ -11,6 +17,9 @@ in
     package = lib.mkOption {
       description = "Package to use.";
       type = lib.types.package;
+      default = lib.literalExpression ''
+        pkgs.sanic
+      '';
     };
     ui = lib.mkOption {
       description = "Setting for HTTP(S) UI.";
