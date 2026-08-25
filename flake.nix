@@ -3,13 +3,17 @@
   inputs = {
     nixpkgs.url = github:NixOS/nixpkgs/nixos-unstable-small;
     flake-utils.url = github:numtide/flake-utils;
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     gomod2nix = {
       url = github:tweag/gomod2nix;
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
   };
-  outputs = { self, nixpkgs, flake-utils, gomod2nix }: flake-utils.lib.eachDefaultSystem (system:
+  outputs = { self, nixpkgs, flake-utils, nixos-generators, gomod2nix }: flake-utils.lib.eachDefaultSystem (system:
     let
       pkgs = import nixpkgs {
         inherit system;
@@ -57,7 +61,7 @@
     in
     {
       checks = { inherit go-test go-lint; };
-      formatter = pkgs.nixpkgs-fmt;
+      formatter = pkgs.nixfmt-tree;
       devShells.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           go
@@ -77,6 +81,17 @@
           config = {
             Cmd = [ "${sanic}/bin/sanic" ];
           };
+        };
+        proxmox-lxc = nixos-generators.nixosGenerate {
+          system = "x86_64-linux";
+          format = "proxmox-lxc";
+          #specialArgs = {
+          #  pkgs = pkgs;
+          #};
+          modules = [
+            ./option.nix
+            ./proxmox-lxc.nix
+          ];
         };
       };
       nixosModules.default = import ./option.nix;
