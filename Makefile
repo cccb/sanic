@@ -11,7 +11,9 @@ mpd:  ## Run mpd test instance
 	mpd --no-daemon ./mpd.conf
 
 .PHONY: tls
-tls: localhost+2.pem localhost+2-key.pem  ## Create certificate and key for HTTPS
+tls: localhost+2.pem localhost+2-key.pem ## Create certificate and key for HTTPS
+
+localhost+2.pem localhost+2-key.pem:
 	mkcert -ecdsa localhost 127.0.0.1 ::1
 
 run: build  ## Run project
